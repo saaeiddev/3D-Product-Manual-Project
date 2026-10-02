@@ -34,6 +34,13 @@ This is no longer a single-camera demo. The site is structured as an **Industria
 - Searchable component list
 - Actual loading progress and model-source fallback where available
 
+## Interaction update
+
+- Mesh-aware component focus and highlighting
+- Animated real-mesh exploded / assembled transitions
+- Polygonal industrial controls across product cards, tool buttons, component buttons and header controls
+- Realistic multi-part V8 engine asset with Draco decoding
+
 ## Visual direction
 
 The current UI intentionally avoids the repeated dark blue glassmorphism language used in earlier projects. It uses an **industrial editorial / product-design-lab** direction:
@@ -57,7 +64,7 @@ The project loads web-ready GLB assets from traceable public sources.
 - **Smartphone fallback** — ToonStudio original smartphone, CC0 1.0
 - **Ferrari F40** — Black Snow / SceneView, CC BY 4.0
 - **Car fallback** — Khronos ToyCar, CC BY 4.0
-- **Engine** — A-Frame example asset
+- **V8 Engine** — “Animated Engine V8” by meeww, CC BY 4.0; vendored by johnnyhuy/vibes via Objaverse
 - **Medical stethoscope** — ToonStudio original asset, CC0 1.0
 - **Adaptive power wheelchair** — ToonStudio original asset, CC0 1.0
 
