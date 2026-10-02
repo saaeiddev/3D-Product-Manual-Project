@@ -15,6 +15,8 @@ This is no longer a single-camera demo. The site is structured as an **Industria
 5. Automotive engine
 6. Medical stethoscope
 7. Adaptive power wheelchair
+8. Smartphone Li-ion Battery — official Sketchfab viewer
+9. Laptop Battery Pack — Graphitage, CC Attribution via Sketchfab
 
 ## Interaction
 
