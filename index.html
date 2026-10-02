@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#070b10" />
+  <meta name="description" content="3D Product Manual — a premium bilingual interactive 3D product manual." />
+  <meta property="og:title" content="3D Product Manual" />
+  <meta property="og:description" content="Explore a professional mirrorless camera in an interactive bilingual 3D manual." />
+  <meta name="color-scheme" content="dark" />
+  <title>3D Product Manual</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://sceneview.github.io" crossorigin>
+  <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap');
+
+:root{
+  color-scheme: dark;
+  --bg:#070b10; --panel:rgba(16,23,32,.72); --panel-strong:rgba(12,18,27,.9); --line:rgba(255,255,255,.1);
+  --text:#f4f7fb; --muted:#98a8b9; --cyan:#7dddf4; --cyan2:#67a9ff; --danger:#ff8e8e; --success:#8ce0b5;
+  --shadow:0 28px 90px rgba(0,0,0,.42); --radius:22px; --radius-sm:14px;
+}
+*{box-sizing:border-box} html,body,#app{width:100%;height:100%;margin:0} body{overflow:hidden;background:radial-gradient(circle at 50% 35%,#13212d 0,#0a1018 36%,#06090d 78%);font-family:Inter,system-ui,sans-serif;color:var(--text)}
+html[dir="rtl"] body{font-family:Vazirmatn,Inter,sans-serif}
+button,input{font:inherit} button{color:inherit}
+.app-shell{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);position:relative;isolation:isolate}
+.app-shell:before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(40% 36% at 50% 55%,rgba(66,140,184,.13),transparent 72%),linear-gradient(transparent 95%,rgba(255,255,255,.018));background-size:auto,100% 28px}
+.topbar{height:70px;margin:12px 14px 0;padding:0 16px;display:flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:20px;background:rgba(10,15,23,.66);backdrop-filter:blur(22px) saturate(140%);box-shadow:var(--shadow);z-index:20}
+.brand{display:flex;align-items:center;gap:10px;min-width:max-content;font-weight:700;letter-spacing:-.02em}.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(140deg,rgba(125,221,244,.95),rgba(103,169,255,.7));box-shadow:0 0 32px rgba(103,169,255,.3);display:grid;place-items:center;color:#041018;font-weight:900}.brand small{display:block;color:var(--muted);font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+.nav{display:flex;gap:4px;margin-inline:auto}.nav button,.icon-btn,.control-btn,.tree-item,.search-result,.action{border:0;background:transparent;cursor:pointer}.nav button{padding:10px 12px;border-radius:12px;color:var(--muted);transition:.2s}.nav button:hover,.nav button.active{color:var(--text);background:rgba(255,255,255,.07)}
+.top-actions{display:flex;align-items:center;gap:8px}.lang{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}.lang button{border:0;background:transparent;color:var(--muted);padding:8px 9px;cursor:pointer}.lang button.active{background:rgba(125,221,244,.12);color:var(--cyan)}
+.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;background:rgba(255,255,255,.035)}.icon-btn:hover{background:rgba(255,255,255,.08)}
+.workspace{min-height:0;display:grid;grid-template-columns:286px minmax(360px,1fr) 340px;gap:12px;padding:12px 14px 14px}.glass{border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(22px) saturate(130%);box-shadow:var(--shadow);border-radius:var(--radius)}
+.sidebar{min-height:0;overflow:hidden;display:flex;flex-direction:column}.panel-head{padding:18px 18px 12px;border-bottom:1px solid rgba(255,255,255,.06)}.eyebrow{font-size:11px;color:var(--cyan);letter-spacing:.12em;text-transform:uppercase}.panel-head h2{font-size:18px;margin:4px 0 0;letter-spacing:-.02em}.panel-body{padding:14px;overflow:auto;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
+.search-wrap{position:relative;margin-bottom:14px}.search-input{width:100%;padding:12px 38px 12px 12px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);outline:none}.search-input:focus{border-color:rgba(125,221,244,.45);box-shadow:0 0 0 3px rgba(125,221,244,.08)}html[dir="rtl"] .search-input{padding:12px 12px 12px 38px}.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px}html[dir="rtl"] .search-icon{right:auto;left:12px}
+.search-results{position:absolute;top:48px;left:0;right:0;background:rgba(9,14,21,.97);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);z-index:30;max-height:270px;overflow:auto}.search-result{display:block;width:100%;padding:10px 12px;color:var(--text);text-align:start;border-bottom:1px solid rgba(255,255,255,.05)}.search-result:hover{background:rgba(125,221,244,.08)}
+.category{margin-bottom:16px}.category-title{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:6px 6px 7px}.tree-item{display:flex;width:100%;align-items:center;gap:10px;color:#c4cfda;padding:10px;border-radius:12px;text-align:start;transition:.18s}.tree-item:hover,.tree-item.active{background:rgba(125,221,244,.085);color:#fff}.dot{width:7px;height:7px;border-radius:50%;background:#547089;box-shadow:0 0 0 4px rgba(84,112,137,.12)}.tree-item.active .dot{background:var(--cyan);box-shadow:0 0 0 4px rgba(125,221,244,.13)}
+.viewer{min-height:0;position:relative;overflow:hidden}.viewer canvas{display:block;width:100%;height:100%;outline:none}.viewer:after{content:"";position:absolute;inset:auto 12% 9% 12%;height:10%;z-index:0;background:radial-gradient(ellipse,rgba(90,137,167,.22),transparent 70%);filter:blur(10px);pointer-events:none}.viewer-badge{position:absolute;left:18px;top:18px;z-index:8;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(8,13,20,.62);backdrop-filter:blur(18px);font-size:12px;color:var(--muted)}html[dir="rtl"] .viewer-badge{left:auto;right:18px}.viewer-badge strong{display:block;color:#fff;font-size:14px;margin-bottom:2px}
+.bottom-controls{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:9;display:flex;gap:7px;padding:7px;border:1px solid var(--line);border-radius:16px;background:rgba(8,13,20,.72);backdrop-filter:blur(20px);box-shadow:var(--shadow);max-width:calc(100% - 24px);overflow:auto}.control-btn{min-width:max-content;padding:9px 11px;border-radius:11px;color:var(--muted)}.control-btn:hover,.control-btn.active{background:rgba(255,255,255,.08);color:#fff}
+.hotspot{appearance:none;border:0;display:flex;align-items:center;gap:7px;color:#eafcff;background:transparent;cursor:pointer;pointer-events:auto;transform:translate(-50%,-50%);white-space:nowrap}.hotspot-pulse{width:13px;height:13px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 5px rgba(125,221,244,.14),0 0 18px rgba(125,221,244,.75)}.hotspot-label{opacity:0;transform:translateX(-4px);transition:.2s;padding:6px 8px;border-radius:9px;background:rgba(7,12,19,.82);border:1px solid rgba(255,255,255,.1);font-size:11px}.hotspot:hover .hotspot-label,.hotspot.active .hotspot-label{opacity:1;transform:none}.hotspot.active .hotspot-pulse{background:#fff;box-shadow:0 0 0 6px rgba(125,221,244,.2),0 0 24px rgba(125,221,244,.95)}
+.info-empty{height:100%;min-height:300px;display:grid;place-items:center;padding:28px;text-align:center;color:var(--muted)}.info-empty .orb{width:68px;height:68px;border-radius:50%;margin:0 auto 14px;background:radial-gradient(circle at 35% 30%,#aef3ff,#4c7cb1 45%,#111923 70%);box-shadow:0 0 48px rgba(88,174,225,.24)}
+.info-title{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.info-title h3{font-size:22px;line-height:1.18;margin:2px 0 4px;letter-spacing:-.03em}.info-title p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}.info-section{padding:14px 0;border-top:1px solid rgba(255,255,255,.07)}.info-section:first-of-type{border-top:0}.info-section h4{font-size:12px;color:var(--cyan);text-transform:uppercase;letter-spacing:.09em;margin:0 0 8px}.info-section p,.info-section li{color:#c5d0da;font-size:13px;line-height:1.75}.info-section p{margin:0}.info-section ul{padding-inline-start:19px;margin:0}.warning{border:1px solid rgba(255,142,142,.18);background:rgba(255,142,142,.06);padding:10px 12px;border-radius:12px;color:#ffc1c1!important}
+.loading{position:absolute;inset:0;z-index:50;background:radial-gradient(circle at 50% 42%,#14222d,#070b10 70%);display:grid;place-items:center;text-align:center;transition:opacity .5s,visibility .5s}.loading.hidden{opacity:0;visibility:hidden}.loading-card{width:min(420px,calc(100% - 34px))}.silhouette{width:150px;height:96px;margin:0 auto 24px;border:1px solid rgba(255,255,255,.13);border-radius:18px;position:relative;box-shadow:inset 0 0 28px rgba(125,221,244,.06)}.silhouette:before{content:"";position:absolute;width:74px;height:56px;border-radius:50%;border:1px solid rgba(125,221,244,.38);left:50%;top:50%;transform:translate(-50%,-50%)}.silhouette:after{content:"";position:absolute;width:54px;height:16px;border-radius:8px 8px 0 0;background:rgba(255,255,255,.07);top:-10px;left:18px}.loading h1{font-size:22px;margin:0 0 8px}.loading p{color:var(--muted);margin:0 0 18px;font-size:13px}.progress{height:5px;background:rgba(255,255,255,.07);border-radius:10px;overflow:hidden}.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--cyan2));transition:width .2s}.progress-meta{display:flex;justify-content:space-between;margin-top:9px;color:var(--muted);font-size:12px}.load-error{margin-top:18px;padding:13px;border:1px solid rgba(255,142,142,.2);background:rgba(255,142,142,.06);border-radius:12px;color:#ffc3c3;font-size:13px}.action{padding:9px 12px;border-radius:11px;background:rgba(125,221,244,.12);color:var(--cyan);margin-top:10px}
+.modal-layer{position:fixed;inset:0;z-index:80;background:rgba(1,4,7,.62);backdrop-filter:blur(12px);display:grid;place-items:center;padding:20px}.modal{width:min(760px,100%);max-height:min(760px,90vh);overflow:auto;border:1px solid var(--line);border-radius:24px;background:rgba(11,17,25,.96);box-shadow:var(--shadow)}.modal-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border-bottom:1px solid var(--line);background:rgba(11,17,25,.93);backdrop-filter:blur(20px)}.modal-head h2{font-size:18px;margin:0}.modal-body{padding:20px}.modal-body p,.modal-body li{color:#c5d0da;line-height:1.75;font-size:14px}.cards{display:grid;gap:10px}.card{padding:14px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.035)}.card h3{font-size:15px;margin:0 0 7px}.card p{margin:0}.card button{margin-top:10px}
+.guide-step{display:flex;gap:14px;align-items:flex-start}.step-index{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(125,221,244,.12);color:var(--cyan);font-weight:700;flex:0 0 auto}
+.toast{position:fixed;z-index:100;left:50%;bottom:92px;transform:translate(-50%,14px);opacity:0;pointer-events:none;padding:10px 13px;border-radius:12px;background:rgba(8,13,20,.93);border:1px solid var(--line);color:#d8e5ef;font-size:12px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+.mobile-panel-toggle{display:none}
+@media(max-width:1180px){.workspace{grid-template-columns:240px minmax(360px,1fr) 300px}.nav{display:none}}
+@media(max-width:900px){body{overflow:hidden}.topbar{margin:8px 8px 0;height:62px;border-radius:17px;padding:0 11px}.brand small{display:none}.workspace{grid-template-columns:1fr;padding:8px;height:calc(100% - 70px)}.viewer{grid-row:1}.sidebar{position:absolute;top:82px;bottom:10px;width:min(88vw,340px);z-index:35;transition:transform .28s}.sidebar.left{left:8px;transform:translateX(calc(-100% - 16px))}.sidebar.right{right:8px;transform:translateX(calc(100% + 16px))}.sidebar.open{transform:translateX(0)}.mobile-panel-toggle{display:grid}.top-actions{margin-inline-start:auto}.bottom-controls{bottom:10px}.control-btn .label{display:none}.viewer-badge{top:12px;left:12px}.topbar .desktop-only{display:none}}
+@media(max-width:560px){.brand span:last-child{font-size:13px}.lang button{padding:7px}.icon-btn{width:34px;height:34px}.bottom-controls{left:8px;right:8px;transform:none;justify-content:flex-start}.viewer-badge{max-width:190px}.viewer-badge strong{font-size:12px}.hotspot-label{display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app" aria-live="polite"></div>
+  <script type="module">
+const product = {
+  id: 'canon-eos-rp',
+  name: { en: 'Canon EOS RP Mirrorless Camera', fa: 'دوربین بدون آینه Canon EOS RP' },
+  modelUrls: [
+    'https://sceneview.github.io/models/platforms/canon_eos_rp.glb',
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/AntiqueCamera/glTF-Binary/AntiqueCamera.glb'
+  ],
+  sourceUrl: 'https://sketchfab.com/3d-models/canon-eos-rp-mirrorless-camera-3d-model-cd470005397c48ec8b68bb8a4609ecd1',
+  author: 'fahadratul',
+  license: 'CC-BY-4.0',
+  fallbackCredit: 'Antique Camera by UX3D / Maximillan Kamps — CC0-1.0',
+  components: [
+    {
+      id: 'body', category: 'body', hotspot: [0.05, 0.05, 0.18], keywords: ['body','بدنه'],
+      name: { en: 'Camera Body', fa: 'بدنه دوربین' },
+      short: { en: 'Main structural shell containing the imaging and control systems.', fa: 'ساختار اصلی دوربین که سامانه تصویربرداری و کنترل را در خود جای می‌دهد.' },
+      function: { en: 'Protects and supports the sensor, processor, mount, controls and interfaces.', fa: 'از حسگر، پردازنده، مانت، کنترل‌ها و درگاه‌ها محافظت و پشتیبانی می‌کند.' },
+      specs: { en: ['Full-frame mirrorless body', 'Weather-aware sealed design', 'Interchangeable lens system'], fa: ['بدنه فول‌فریم بدون آینه', 'طراحی مقاوم در برابر شرایط محیطی', 'سامانه لنز قابل تعویض'] },
+      how: { en: 'The rigid body aligns the lens mount with the imaging plane and carries the electronics.', fa: 'بدنه صلب، مانت لنز را با صفحه حسگر هم‌راستا نگه می‌دارد و قطعات الکترونیکی را حمل می‌کند.' },
+      use: { en: 'Hold the grip securely, keep ports closed when not in use, and attach a compatible lens.', fa: 'دسته را محکم بگیرید، درپوش درگاه‌ها را در حالت عدم استفاده بسته نگه دارید و لنز سازگار نصب کنید.' },
+      maintenance: { en: 'Wipe with a soft dry microfiber cloth. Keep dust away from open cavities.', fa: 'با پارچه میکروفایبر نرم و خشک تمیز کنید و از ورود گردوغبار به بخش‌های باز جلوگیری کنید.' },
+      problems: { en: ['Loose panels', 'Dust ingress', 'Impact damage'], fa: ['شل شدن پوشش‌ها', 'ورود گردوغبار', 'آسیب ضربه‌ای'] },
+      warnings: { en: 'Do not use strong solvents or compressed air directly on openings.', fa: 'از حلال‌های قوی یا هوای فشرده مستقیم روی بخش‌های باز استفاده نکنید.' }
+    },
+    {
+      id: 'lens', category: 'lens', hotspot: [0.05, -0.03, 0.72], keywords: ['lens','لنز'],
+      name: { en: 'Lens', fa: 'لنز' },
+      short: { en: 'Optical assembly that focuses incoming light onto the sensor.', fa: 'مجموعه اپتیکی که نور ورودی را روی حسگر متمرکز می‌کند.' },
+      function: { en: 'Controls field of view, focus and light transmission.', fa: 'میدان دید، فوکوس و عبور نور را کنترل می‌کند.' },
+      specs: { en: ['Interchangeable RF-mount optic', 'Electronic communication', 'Manual focus ring'], fa: ['اپتیک قابل تعویض با مانت RF', 'ارتباط الکترونیکی', 'رینگ فوکوس دستی'] },
+      how: { en: 'Multiple shaped glass elements bend light to form a sharp image on the sensor plane.', fa: 'چندین المان شیشه‌ای شکل‌دار نور را می‌شکنند تا تصویر شارپی روی صفحه حسگر تشکیل شود.' },
+      use: { en: 'Mount until it locks, remove the front cap before shooting, and select AF or MF as needed.', fa: 'لنز را تا قفل شدن نصب کنید، پیش از عکاسی درپوش جلو را بردارید و AF یا MF را انتخاب کنید.' },
+      maintenance: { en: 'Use a blower first, then a lens-safe cloth or optical cleaning fluid.', fa: 'ابتدا از دمنده و سپس پارچه مخصوص لنز یا محلول اپتیکی استفاده کنید.' },
+      problems: { en: ['Front-element dust', 'Focus hunting', 'Loose mount'], fa: ['گردوغبار سطح جلو', 'جست‌وجوی فوکوس', 'شل بودن اتصال'] },
+      warnings: { en: 'Never wipe grit across glass; it may scratch coatings.', fa: 'ذرات زبر را روی شیشه نکشید؛ ممکن است پوشش اپتیکی خراشیده شود.' }
+    },
+    {
+      id: 'mount', category: 'lens', hotspot: [0.02, -0.02, 0.43], keywords: ['mount','lens mount','مانت','دهانه'],
+      name: { en: 'Lens Mount', fa: 'مانت لنز' },
+      short: { en: 'Precision coupling between the camera body and interchangeable lens.', fa: 'اتصال دقیق میان بدنه و لنز قابل تعویض.' },
+      function: { en: 'Mechanically secures the lens and carries electronic communication.', fa: 'لنز را به‌صورت مکانیکی قفل می‌کند و ارتباط الکترونیکی را برقرار می‌سازد.' },
+      specs: { en: ['Metal bayonet interface', 'Electronic contacts', 'Alignment index'], fa: ['رابط بایونتی فلزی', 'کنتاکت‌های الکترونیکی', 'نشانگر هم‌ترازی'] },
+      how: { en: 'Bayonet tabs rotate into a locked position while contacts connect camera and lens electronics.', fa: 'زبانه‌های بایونتی با چرخش قفل می‌شوند و کنتاکت‌ها مدارهای لنز و دوربین را متصل می‌کنند.' },
+      use: { en: 'Align the index marks, insert the lens, then rotate until the lock clicks.', fa: 'نشانگرها را هم‌راستا کنید، لنز را قرار دهید و تا شنیدن صدای قفل بچرخانید.' },
+      maintenance: { en: 'Keep the metal ring and contacts clean and dry.', fa: 'حلقه فلزی و کنتاکت‌ها را تمیز و خشک نگه دارید.' },
+      problems: { en: ['Dirty contacts', 'Bent bayonet', 'Lens not recognized'], fa: ['کثیفی کنتاکت‌ها', 'خم شدن بایونت', 'شناخته نشدن لنز'] },
+      warnings: { en: 'Power the camera off before changing lenses in dusty environments.', fa: 'در محیط‌های پرگردوغبار پیش از تعویض لنز دوربین را خاموش کنید.' }
+    },
+    {
+      id: 'sensor', category: 'body', hotspot: [0.01, -0.02, 0.31], keywords: ['sensor','image sensor','حسگر','سنسور'],
+      name: { en: 'Image Sensor', fa: 'حسگر تصویر' },
+      short: { en: 'Full-frame light-sensitive imaging surface behind the lens mount.', fa: 'سطح حساس به نور فول‌فریم در پشت مانت لنز.' },
+      function: { en: 'Converts focused light into digital image data.', fa: 'نور متمرکز را به داده دیجیتال تصویر تبدیل می‌کند.' },
+      specs: { en: ['Full-frame format', 'Digital photo capture', 'Protected behind shutter area'], fa: ['فرمت فول‌فریم', 'ثبت دیجیتال تصویر', 'قرارگیری در بخش محافظت‌شده پشت شاتر'] },
+      how: { en: 'Millions of photosites measure light intensity and color through the camera imaging pipeline.', fa: 'میلیون‌ها فوتوسایت شدت و رنگ نور را در زنجیره تصویربرداری اندازه‌گیری می‌کنند.' },
+      use: { en: 'Normally requires no direct interaction; use sensor-cleaning mode when needed.', fa: 'معمولاً نیازی به تماس مستقیم ندارد؛ در صورت نیاز از حالت تمیزکاری حسگر استفاده کنید.' },
+      maintenance: { en: 'Use a sensor-safe blower or professional cleaning kit.', fa: 'از دمنده ایمن برای حسگر یا کیت حرفه‌ای تمیزکاری استفاده کنید.' },
+      problems: { en: ['Dust spots', 'Hot pixels', 'Oil or smear contamination'], fa: ['لکه گردوغبار', 'پیکسل داغ', 'آلودگی چرب یا لکه‌ای'] },
+      warnings: { en: 'Never touch the sensor directly.', fa: 'هرگز مستقیماً حسگر را لمس نکنید.' }
+    },
+    {
+      id: 'shutter', category: 'body', hotspot: [0.33, 0.43, 0.09], keywords: ['shutter','button','دکمه شاتر','شاتر'],
+      name: { en: 'Shutter Button', fa: 'دکمه شاتر' },
+      short: { en: 'Primary two-stage capture control.', fa: 'کنترل اصلی دو مرحله‌ای برای ثبت تصویر.' },
+      function: { en: 'Half-press initiates focus/metering; full press captures the image.', fa: 'نیم‌فشار فوکوس و نورسنجی را آغاز می‌کند و فشار کامل تصویر را ثبت می‌کند.' },
+      specs: { en: ['Two-stage tactile control', 'Top grip placement'], fa: ['کنترل لمسی دو مرحله‌ای', 'قرارگیری روی بخش بالایی گریپ'] },
+      how: { en: 'The switch reports a half-press state before the full release command.', fa: 'کلید ابتدا وضعیت نیم‌فشار و سپس فرمان ثبت کامل را گزارش می‌کند.' },
+      use: { en: 'Press gently halfway, confirm focus, then continue smoothly to capture.', fa: 'به‌آرامی تا نیمه فشار دهید، فوکوس را تأیید کنید و سپس نرم تا انتها فشار دهید.' },
+      maintenance: { en: 'Keep free of dust and sticky residue.', fa: 'از گردوغبار و آلودگی چسبناک پاک نگه دارید.' },
+      problems: { en: ['Sticky action', 'No half-press', 'Intermittent response'], fa: ['گیر کردن', 'عمل نکردن نیم‌فشار', 'پاسخ مقطعی'] },
+      warnings: { en: 'Do not force the button if it is physically jammed.', fa: 'اگر دکمه گیر کرده است آن را با فشار زیاد مجبور به حرکت نکنید.' }
+    },
+    {
+      id: 'mode-dial', category: 'controls', hotspot: [-0.31, 0.42, 0.02], keywords: ['mode dial','dial','پیچ حالت','مود'],
+      name: { en: 'Mode Dial', fa: 'پیچ انتخاب حالت' },
+      short: { en: 'Top dial for choosing exposure and shooting modes.', fa: 'پیچ بالایی برای انتخاب حالت‌های نوردهی و عکاسی.' },
+      function: { en: 'Changes camera operating mode.', fa: 'حالت عملکرد دوربین را تغییر می‌دهد.' },
+      specs: { en: ['Detented rotary dial', 'Exposure mode selection'], fa: ['پیچ چرخشی پله‌ای', 'انتخاب حالت نوردهی'] },
+      how: { en: 'Rotational detents map each physical position to a camera mode.', fa: 'هر پله چرخشی با یک حالت نرم‌افزاری دوربین متناظر است.' },
+      use: { en: 'Rotate to the desired shooting mode before composing.', fa: 'پیش از کادربندی پیچ را روی حالت موردنظر بچرخانید.' },
+      maintenance: { en: 'Brush dust from the perimeter with a soft tool.', fa: 'گردوغبار دور پیچ را با ابزار نرم پاک کنید.' },
+      problems: { en: ['Skipped positions', 'Stiff rotation'], fa: ['پرش بین حالت‌ها', 'چرخش سفت'] },
+      warnings: { en: 'Avoid turning with excessive force.', fa: 'از چرخاندن با نیروی بیش از حد خودداری کنید.' }
+    },
+    {
+      id: 'viewfinder', category: 'controls', hotspot: [0.01, 0.38, -0.15], keywords: ['viewfinder','evf','ویزور','منظره یاب'],
+      name: { en: 'Electronic Viewfinder', fa: 'منظره‌یاب الکترونیکی' },
+      short: { en: 'Eye-level electronic display for composing images.', fa: 'نمایشگر الکترونیکی هم‌سطح چشم برای کادربندی.' },
+      function: { en: 'Shows live image, exposure preview and camera status.', fa: 'تصویر زنده، پیش‌نمایش نوردهی و وضعیت دوربین را نمایش می‌دهد.' },
+      specs: { en: ['Eye sensor', 'Diopter adjustment', 'Live electronic preview'], fa: ['حسگر چشم', 'تنظیم دیوپتر', 'پیش‌نمایش الکترونیکی زنده'] },
+      how: { en: 'A compact display receives the processed live image from the sensor.', fa: 'یک نمایشگر کوچک تصویر زنده پردازش‌شده حسگر را دریافت می‌کند.' },
+      use: { en: 'Bring your eye close and adjust diopter until overlays are sharp.', fa: 'چشم را نزدیک کنید و دیوپتر را تا شارپ شدن نوشته‌ها تنظیم کنید.' },
+      maintenance: { en: 'Clean the eyecup and glass gently.', fa: 'چشمی و شیشه را به‌آرامی تمیز کنید.' },
+      problems: { en: ['Blurred display', 'Eye sensor not switching'], fa: ['نمایش تار', 'عمل نکردن حسگر چشم'] },
+      warnings: { en: 'Do not scratch the viewfinder glass.', fa: 'شیشه منظره‌یاب را خراش ندهید.' }
+    },
+    {
+      id: 'lcd', category: 'controls', hotspot: [0.02, 0.03, -0.33], keywords: ['lcd','screen','display','نمایشگر','صفحه'],
+      name: { en: 'LCD Display', fa: 'نمایشگر LCD' },
+      short: { en: 'Rear monitor used for live view, menus and playback.', fa: 'نمایشگر پشتی برای Live View، منوها و بازبینی تصاویر.' },
+      function: { en: 'Displays composition, settings, menus and captured media.', fa: 'کادربندی، تنظیمات، منوها و تصاویر ثبت‌شده را نمایش می‌دهد.' },
+      specs: { en: ['Rear color display', 'Touch interaction where supported', 'Articulating design'], fa: ['نمایشگر رنگی پشتی', 'تعامل لمسی در حالت‌های پشتیبانی‌شده', 'طراحی متحرک'] },
+      how: { en: 'Receives processed graphics and live image data from the camera processor.', fa: 'داده تصویر زنده و رابط گرافیکی را از پردازنده دوربین دریافت می‌کند.' },
+      use: { en: 'Open or angle the screen as needed; use touch or physical controls.', fa: 'نمایشگر را در زاویه مناسب باز کنید و از لمس یا کنترل‌های فیزیکی استفاده کنید.' },
+      maintenance: { en: 'Use a clean microfiber cloth; avoid harsh cleaners.', fa: 'از پارچه میکروفایبر تمیز استفاده کنید و سراغ شوینده قوی نروید.' },
+      problems: { en: ['No image', 'Touch not responding', 'Hinge stiffness'], fa: ['نداشتن تصویر', 'پاسخ ندادن لمس', 'سفتی لولا'] },
+      warnings: { en: 'Do not close the screen against trapped debris.', fa: 'نمایشگر را روی ذرات یا جسم گیرکرده نبندید.' }
+    },
+    {
+      id: 'battery', category: 'power', hotspot: [0.21, -0.47, -0.03], keywords: ['battery','power','باتری'],
+      name: { en: 'Battery Compartment', fa: 'محفظه باتری' },
+      short: { en: 'Bottom compartment for the removable rechargeable battery.', fa: 'محفظه زیرین برای باتری شارژی قابل تعویض.' },
+      function: { en: 'Supplies electrical power to the camera.', fa: 'انرژی الکتریکی موردنیاز دوربین را تأمین می‌کند.' },
+      specs: { en: ['Removable battery pack', 'Latched door', 'Electrical contacts'], fa: ['باتری قابل تعویض', 'درب قفل‌دار', 'کنتاکت‌های الکتریکی'] },
+      how: { en: 'Spring and contact mechanisms hold the battery against the power terminals.', fa: 'مکانیزم فنری و کنتاکت‌ها باتری را به پایانه‌های برق متصل نگه می‌دارند.' },
+      use: { en: 'Power off, open the door, release the latch, insert battery in the indicated orientation.', fa: 'دوربین را خاموش کنید، درب را باز کنید، ضامن را آزاد کنید و باتری را در جهت صحیح قرار دهید.' },
+      maintenance: { en: 'Keep contacts dry; inspect for swelling or corrosion.', fa: 'کنتاکت‌ها را خشک نگه دارید و باتری را از نظر تورم یا خوردگی بررسی کنید.' },
+      problems: { en: ['Battery not detected', 'Door will not close', 'Rapid drain'], fa: ['شناخته نشدن باتری', 'بسته نشدن درب', 'تخلیه سریع شارژ'] },
+      warnings: { en: 'Never use a swollen or damaged battery.', fa: 'هرگز از باتری متورم یا آسیب‌دیده استفاده نکنید.' }
+    },
+    {
+      id: 'memory', category: 'power', hotspot: [0.30, -0.25, -0.23], keywords: ['memory','sd','card','کارت حافظه','حافظه'],
+      name: { en: 'Memory Card Slot', fa: 'درگاه کارت حافظه' },
+      short: { en: 'Slot for removable storage media.', fa: 'محل قرارگیری حافظه قابل تعویض.' },
+      function: { en: 'Stores photos, video and camera data.', fa: 'عکس‌ها، ویدیوها و داده‌های دوربین را ذخیره می‌کند.' },
+      specs: { en: ['Removable flash storage', 'Push-to-lock mechanism'], fa: ['حافظه فلش قابل تعویض', 'مکانیزم فشاری قفل‌شونده'] },
+      how: { en: 'Spring contacts connect the inserted card to the camera storage controller.', fa: 'کنتاکت‌های فنری کارت را به کنترلر ذخیره‌سازی دوربین متصل می‌کنند.' },
+      use: { en: 'Insert in the marked orientation until it clicks.', fa: 'کارت را در جهت مشخص‌شده تا شنیدن کلیک وارد کنید.' },
+      maintenance: { en: 'Keep the slot free of dust and damaged cards.', fa: 'درگاه را از گردوغبار و کارت‌های آسیب‌دیده دور نگه دارید.' },
+      problems: { en: ['Card error', 'Write protected', 'Slow recording'], fa: ['خطای کارت', 'قفل نوشتن', 'ثبت کند'] },
+      warnings: { en: 'Do not remove the card while the access indicator is active.', fa: 'هنگام فعال بودن نشانگر دسترسی کارت را خارج نکنید.' }
+    },
+    {
+      id: 'usb', category: 'interfaces', hotspot: [-0.36, 0.02, -0.05], keywords: ['usb','usb-c','type-c','یو اس بی'],
+      name: { en: 'USB-C Port', fa: 'درگاه USB‑C' },
+      short: { en: 'Digital connection for data transfer and supported power functions.', fa: 'اتصال دیجیتال برای انتقال داده و قابلیت‌های پشتیبانی‌شده برق.' },
+      function: { en: 'Connects the camera to computers, accessories or power sources.', fa: 'دوربین را به رایانه، لوازم جانبی یا منبع برق متصل می‌کند.' },
+      specs: { en: ['Reversible connector', 'High-speed digital data'], fa: ['کانکتور دوطرفه', 'انتقال داده پرسرعت'] },
+      how: { en: 'Differential digital lines carry data through the reversible connector.', fa: 'خطوط دیجیتال تفاضلی داده را از طریق کانکتور دوطرفه منتقل می‌کنند.' },
+      use: { en: 'Insert a compatible USB-C cable without forcing it.', fa: 'کابل USB‑C سازگار را بدون فشار اضافی وارد کنید.' },
+      maintenance: { en: 'Remove lint with a non-metallic soft tool.', fa: 'پرز را با ابزار نرم و غیر فلزی خارج کنید.' },
+      problems: { en: ['Loose cable', 'No data connection', 'Debris in port'], fa: ['شل بودن کابل', 'نبود ارتباط داده', 'وجود آلودگی در پورت'] },
+      warnings: { en: 'Do not insert metal tools into the port.', fa: 'ابزار فلزی را داخل درگاه وارد نکنید.' }
+    },
+    {
+      id: 'hdmi', category: 'interfaces', hotspot: [-0.37, -0.10, -0.04], keywords: ['hdmi','اچ دی ام آی'],
+      name: { en: 'HDMI Port', fa: 'درگاه HDMI' },
+      short: { en: 'Digital audiovisual output for external displays or recorders.', fa: 'خروجی دیجیتال صدا و تصویر برای نمایشگر یا رکوردر خارجی.' },
+      function: { en: 'Outputs camera video and interface signals.', fa: 'سیگنال ویدیویی و رابط دوربین را خروجی می‌دهد.' },
+      specs: { en: ['Digital A/V output', 'External monitor support'], fa: ['خروجی دیجیتال صدا و تصویر', 'پشتیبانی از مانیتور خارجی'] },
+      how: { en: 'The camera encodes video data and transmits it over the HDMI connection.', fa: 'دوربین داده ویدیویی را کدگذاری و از اتصال HDMI ارسال می‌کند.' },
+      use: { en: 'Connect with the correct cable type, then configure display output settings.', fa: 'با کابل مناسب متصل شوید و سپس تنظیمات خروجی تصویر را انجام دهید.' },
+      maintenance: { en: 'Protect the connector from side loads.', fa: 'کانکتور را از فشار جانبی محافظت کنید.' },
+      problems: { en: ['No signal', 'Intermittent image', 'Loose connector'], fa: ['نبود سیگنال', 'قطع و وصل تصویر', 'شل بودن کانکتور'] },
+      warnings: { en: 'Avoid pulling the cable sideways.', fa: 'کابل را از پهلو نکشید.' }
+    },
+    {
+      id: 'mic', category: 'interfaces', hotspot: [-0.38, 0.14, -0.04], keywords: ['microphone','mic','audio','میکروفن','صدا'],
+      name: { en: 'Microphone Input', fa: 'ورودی میکروفن' },
+      short: { en: 'Audio input for an external microphone.', fa: 'ورودی صدا برای میکروفن خارجی.' },
+      function: { en: 'Accepts an external microphone signal for video recording.', fa: 'سیگنال میکروفن خارجی را برای ضبط ویدیو دریافت می‌کند.' },
+      specs: { en: ['Analog audio input', 'Accessory microphone support'], fa: ['ورودی صوتی آنالوگ', 'پشتیبانی از میکروفن جانبی'] },
+      how: { en: 'The microphone signal is conditioned and converted for digital recording.', fa: 'سیگنال میکروفن تقویت و برای ثبت دیجیتال تبدیل می‌شود.' },
+      use: { en: 'Connect a compatible mic and verify audio levels before recording.', fa: 'میکروفن سازگار را وصل کنید و پیش از ضبط سطح صدا را بررسی کنید.' },
+      maintenance: { en: 'Keep the jack clean and dry.', fa: 'جک را تمیز و خشک نگه دارید.' },
+      problems: { en: ['No audio', 'Hum or crackle', 'Loose plug'], fa: ['نبود صدا', 'نویز یا خش', 'شل بودن فیش'] },
+      warnings: { en: 'Do not force incompatible plugs.', fa: 'فیش ناسازگار را با فشار وارد نکنید.' }
+    },
+    {
+      id: 'hotshoe', category: 'interfaces', hotspot: [0.00, 0.52, 0.00], keywords: ['hot shoe','flash','کفشک','فلاش'],
+      name: { en: 'Hot Shoe', fa: 'کفشک فلاش' },
+      short: { en: 'Top accessory mount with electrical contacts.', fa: 'پایه بالایی لوازم جانبی با کنتاکت الکتریکی.' },
+      function: { en: 'Mounts flashes, triggers, microphones and other compatible accessories.', fa: 'فلاش، تریگر، میکروفن و لوازم سازگار را نصب می‌کند.' },
+      specs: { en: ['Accessory rail', 'Electrical sync contacts'], fa: ['ریل نصب لوازم', 'کنتاکت‌های سینک الکتریکی'] },
+      how: { en: 'The accessory slides into the rail and locks while contacts align.', fa: 'لوازم داخل ریل می‌لغزند و هم‌زمان با هم‌راستایی کنتاکت‌ها قفل می‌شوند.' },
+      use: { en: 'Slide the accessory fully into place and secure its locking mechanism.', fa: 'لوازم را کامل داخل ریل ببرید و مکانیزم قفل آن را محکم کنید.' },
+      maintenance: { en: 'Keep contacts clean; use a protective cover when available.', fa: 'کنتاکت‌ها را تمیز نگه دارید و در صورت امکان از پوشش محافظ استفاده کنید.' },
+      problems: { en: ['Accessory not detected', 'Loose mount'], fa: ['شناخته نشدن لوازم', 'لق بودن پایه'] },
+      warnings: { en: 'Use compatible accessories only.', fa: 'فقط از لوازم سازگار استفاده کنید.' }
+    },
+    {
+      id: 'tripod', category: 'interfaces', hotspot: [0.02, -0.53, 0.00], keywords: ['tripod','mount','سه پایه'],
+      name: { en: 'Tripod Mount', fa: 'رزوه سه‌پایه' },
+      short: { en: 'Threaded bottom mounting point for tripods and support rigs.', fa: 'نقطه رزوه‌دار زیر دوربین برای سه‌پایه و ریگ.' },
+      function: { en: 'Secures the camera to stabilization and support equipment.', fa: 'دوربین را روی تجهیزات نگهدارنده و پایدارکننده ثابت می‌کند.' },
+      specs: { en: ['Standard camera mounting thread', 'Bottom center placement'], fa: ['رزوه استاندارد نصب دوربین', 'قرارگیری در بخش زیرین'] },
+      how: { en: 'A threaded insert transfers load from the camera body to the support plate.', fa: 'اینزرت رزوه‌دار بار بدنه را به صفحه نگهدارنده منتقل می‌کند.' },
+      use: { en: 'Thread the plate screw in straight and tighten only until secure.', fa: 'پیچ صفحه را کاملاً مستقیم وارد کنید و فقط تا حد محکم شدن ببندید.' },
+      maintenance: { en: 'Keep threads clean and inspect for cross-thread damage.', fa: 'رزوه را تمیز نگه دارید و آسیب ناشی از کج بستن را بررسی کنید.' },
+      problems: { en: ['Stripped thread', 'Loose plate'], fa: ['هرز شدن رزوه', 'لق بودن صفحه'] },
+      warnings: { en: 'Do not overtighten.', fa: 'بیش از حد سفت نکنید.' }
+    }
+  ]
+};
+
+const ui = {
+  en: {
+    explore: 'Explore', components: 'Components', how: 'How It Works', maintenance: 'Maintenance', troubleshooting: 'Troubleshooting', about: 'About',
+    search: 'Search components…', componentTree: 'Component tree', selected: 'Selected component', rotate: 'Rotate', zoom: 'Zoom', reset: 'Reset camera', explode: 'Exploded view', assemble: 'Assemble', autoRotate: 'Auto rotate', fullscreen: 'Fullscreen', retry: 'Retry', loading: 'Loading 3D product…', modelFallback: 'Primary model unavailable — loading fallback asset.',
+    function: 'Function', specs: 'Specifications', howWorks: 'How it works', howUse: 'How to use', maintenanceTips: 'Maintenance tips', commonProblems: 'Common problems', warnings: 'Warnings', related: 'Related components', close: 'Close',
+    guideTitle: 'Interactive guides', guideBattery: 'How to replace the battery', step: 'Step', startGuide: 'Start guide', next: 'Next', finish: 'Finish', credits: 'Credits & licenses', modelSource: '3D model source', library: 'Libraries', language: 'Language', noResults: 'No matching components',
+    maintenanceIntro: 'Inspect, clean and protect high-contact components regularly.', troubleshootIntro: 'Select a common issue to focus the relevant part.', aboutText: 'A reusable bilingual digital product manual with interactive 3D inspection, component data, maintenance, troubleshooting and guided procedures.'
+  },
+  fa: {
+    explore: 'کاوش', components: 'قطعات', how: 'نحوه عملکرد', maintenance: 'نگهداری', troubleshooting: 'عیب‌یابی', about: 'درباره',
+    search: 'جست‌وجوی قطعات…', componentTree: 'درخت قطعات', selected: 'قطعه انتخاب‌شده', rotate: 'چرخش', zoom: 'زوم', reset: 'بازنشانی دوربین', explode: 'نمای انفجاری', assemble: 'مونتاژ', autoRotate: 'چرخش خودکار', fullscreen: 'تمام‌صفحه', retry: 'تلاش دوباره', loading: 'در حال بارگذاری محصول سه‌بعدی…', modelFallback: 'مدل اصلی در دسترس نیست؛ مدل جایگزین بارگذاری می‌شود.',
+    function: 'کارکرد', specs: 'مشخصات', howWorks: 'نحوه عملکرد', howUse: 'نحوه استفاده', maintenanceTips: 'نکات نگهداری', commonProblems: 'مشکلات رایج', warnings: 'هشدارها', related: 'قطعات مرتبط', close: 'بستن',
+    guideTitle: 'راهنماهای تعاملی', guideBattery: 'تعویض باتری', step: 'مرحله', startGuide: 'شروع راهنما', next: 'بعدی', finish: 'پایان', credits: 'اعتبارات و مجوزها', modelSource: 'منبع مدل سه‌بعدی', library: 'کتابخانه‌ها', language: 'زبان', noResults: 'قطعه‌ای پیدا نشد',
+    maintenanceIntro: 'قطعات پرکاربرد را به‌طور منظم بررسی، تمیز و محافظت کنید.', troubleshootIntro: 'یکی از مشکلات رایج را انتخاب کنید تا قطعه مرتبط در مدل نمایش داده شود.', aboutText: 'یک راهنمای دیجیتال محصول دو‌زبانه و قابل توسعه با بررسی سه‌بعدی، اطلاعات قطعات، نگهداری، عیب‌یابی و راهنماهای مرحله‌ای.'
+  }
+};
+
+const categories = [
+  { id: 'body', name: { en: 'Body & Imaging', fa: 'بدنه و تصویربرداری' } },
+  { id: 'lens', name: { en: 'Lens System', fa: 'سامانه لنز' } },
+  { id: 'controls', name: { en: 'Controls & Display', fa: 'کنترل‌ها و نمایشگر' } },
+  { id: 'power', name: { en: 'Power & Storage', fa: 'برق و ذخیره‌سازی' } },
+  { id: 'interfaces', name: { en: 'Interfaces & Mounts', fa: 'درگاه‌ها و اتصالات' } }
+];
+
+const troubleshooting = [
+  { title: { en: 'Camera does not turn on', fa: 'دوربین روشن نمی‌شود' }, component: 'battery', causes: { en: ['Empty battery', 'Incorrectly inserted battery', 'Dirty contacts'], fa: ['باتری خالی', 'قرارگیری نادرست باتری', 'کثیفی کنتاکت‌ها'] }, steps: { en: ['Recharge battery', 'Reinsert battery', 'Inspect contacts'], fa: ['باتری را شارژ کنید', 'باتری را دوباره قرار دهید', 'کنتاکت‌ها را بررسی کنید'] } },
+  { title: { en: 'Lens is not recognized', fa: 'لنز شناسایی نمی‌شود' }, component: 'mount', causes: { en: ['Dirty contacts', 'Lens not fully locked', 'Incompatible optic'], fa: ['کثیفی کنتاکت', 'قفل نشدن کامل لنز', 'ناسازگاری لنز'] }, steps: { en: ['Power off', 'Remove and reseat lens', 'Clean contacts carefully'], fa: ['دوربین را خاموش کنید', 'لنز را جدا و دوباره نصب کنید', 'کنتاکت‌ها را با دقت تمیز کنید'] } },
+  { title: { en: 'Dark spots appear in photos', fa: 'لکه‌های تیره در عکس دیده می‌شود' }, component: 'sensor', causes: { en: ['Sensor dust', 'Lens dust', 'Debris inside mount'], fa: ['گردوغبار حسگر', 'گردوغبار لنز', 'آلودگی داخل مانت'] }, steps: { en: ['Inspect lens', 'Run sensor clean', 'Use a sensor-safe blower'], fa: ['لنز را بررسی کنید', 'تمیزکاری حسگر را اجرا کنید', 'از دمنده ایمن حسگر استفاده کنید'] } }
+];
+
+const batteryGuide = [
+  { component: 'battery', en: 'Power the camera off and rotate the camera to access the bottom door.', fa: 'دوربین را خاموش کنید و برای دسترسی به درب زیرین، مدل را به سمت پایین هدایت کنید.' },
+  { component: 'battery', en: 'Open the battery compartment door.', fa: 'درب محفظه باتری را باز کنید.' },
+  { component: 'battery', en: 'Release the battery latch and remove the battery.', fa: 'ضامن باتری را آزاد کنید و باتری را بیرون بیاورید.' },
+  { component: 'battery', en: 'Insert the charged battery in the marked orientation.', fa: 'باتری شارژشده را در جهت علامت‌گذاری‌شده قرار دهید.' },
+  { component: 'battery', en: 'Close the door until it clicks securely.', fa: 'درب را ببندید تا به‌طور مطمئن قفل شود.' }
+];
+
+
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const app = document.querySelector('#app');
+const state = {
+  lang: localStorage.getItem('3dpm-lang') === 'fa' ? 'fa' : 'en',
+  selected: null,
+  currentView: 'explore',
+  model: null,
+  normalizedRoot: null,
+  meshes: [],
+  meshOriginals: new Map(),
+  hotspotObjects: new Map(),
+  associatedMeshes: new Map(),
+  exploded: false,
+  autoRotate: false,
+  loading: true,
+  loadError: null,
+  modelUrlIndex: 0,
+  loadPercent: 0,
+  focusAnim: null,
+  guideStep: 0,
+  modal: null,
+  mobilePanel: null,
+};
+
+let renderer, labelRenderer, scene, camera, controls, raycaster, pointer, resizeObserver, clock;
+let selectedMaterialRestore = [];
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const t = (key) => ui[state.lang][key] ?? key;
+const tx = (obj) => obj?.[state.lang] ?? obj?.en ?? '';
+
+function icon(name) {
+  const icons = {
+    menu:'☰', info:'ⓘ', full:'⛶', search:'⌕', reset:'↺', explode:'↗', assemble:'↙', rotate:'⟳', zoom:'⌕', auto:'◉', close:'×', list:'≡'
+  };
+  return icons[name] || '•';
+}
+
+function setDocumentDirection(){
+  document.documentElement.lang = state.lang === 'fa' ? 'fa' : 'en';
+  document.documentElement.dir = state.lang === 'fa' ? 'rtl' : 'ltr';
+}
+
+function renderShell(){
+  setDocumentDirection();
+  app.innerHTML = `
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand"><div class="brand-mark">3D</div><span>3D Product Manual<small>${state.lang==='fa'?'راهنمای دیجیتال محصول':'Digital product intelligence'}</small></span></div>
+        <nav class="nav" aria-label="Primary navigation">
+          ${['explore','components','how','maintenance','troubleshooting','about'].map(v=>`<button data-view="${v}" class="${state.currentView===v?'active':''}">${t(v)}</button>`).join('')}
+        </nav>
+        <div class="top-actions">
+          <button class="icon-btn mobile-panel-toggle" id="leftToggle" aria-label="${t('components')}">${icon('list')}</button>
+          <div class="lang" aria-label="${t('language')}"><button data-lang="en" class="${state.lang==='en'?'active':''}">EN</button><button data-lang="fa" class="${state.lang==='fa'?'active':''}">FA</button></div>
+          <button class="icon-btn desktop-only" id="creditsBtn" title="${t('credits')}">${icon('info')}</button>
+          <button class="icon-btn" id="fullscreenTop" title="${t('fullscreen')}">${icon('full')}</button>
+          <button class="icon-btn mobile-panel-toggle" id="rightToggle" aria-label="${t('selected')}">${icon('info')}</button>
+        </div>
+      </header>
+      <main class="workspace">
+        <aside class="sidebar left glass" id="leftPanel">
+          <div class="panel-head"><div class="eyebrow">${t('components')}</div><h2>${t('componentTree')}</h2></div>
+          <div class="panel-body">${leftPanelHTML()}</div>
+        </aside>
+        <section class="viewer glass" id="viewer" aria-label="Interactive 3D viewer">
+          <div class="viewer-badge"><strong>${tx(product.name)}</strong><span>${product.components.length} ${state.lang==='fa'?'قطعه تعاملی':'interactive components'}</span></div>
+          <div class="bottom-controls">${controlsHTML()}</div>
+          ${loadingHTML()}
+        </section>
+        <aside class="sidebar right glass" id="rightPanel">
+          <div class="panel-head"><div class="eyebrow">${t('selected')}</div><h2>${state.selected ? tx(state.selected.name) : state.lang==='fa'?'جزئیات فنی':'Technical details'}</h2></div>
+          <div class="panel-body" id="infoBody">${infoHTML()}</div>
+        </aside>
+      </main>
+      <div class="toast" id="toast"></div>
+      <div id="modalRoot">${modalHTML()}</div>
+    </div>`;
+  bindUI();
+  setupThree();
+}
+
+function leftPanelHTML(){
+  return `
+    <div class="search-wrap">
+      <input class="search-input" id="searchInput" placeholder="${t('search')}" autocomplete="off" aria-label="${t('search')}"/>
+      <span class="search-icon">${icon('search')}</span><div id="searchResults"></div>
+    </div>
+    ${categories.map(cat=>{
+      const comps=product.components.filter(c=>c.category===cat.id);
+      return `<div class="category"><div class="category-title">${tx(cat.name)}</div>${comps.map(c=>`<button class="tree-item ${state.selected?.id===c.id?'active':''}" data-component="${c.id}"><i class="dot"></i><span>${tx(c.name)}</span></button>`).join('')}</div>`;
+    }).join('')}`;
+}
+
+function controlsHTML(){
+  const items = [
+    ['reset','reset',t('reset')],
+    [state.exploded?'assemble':'explode',state.exploded?'assemble':'explode',state.exploded?t('assemble'):t('explode')],
+    ['auto','auto',t('autoRotate')],
+    ['full','full',t('fullscreen')]
+  ];
+  return items.map(([ic,act,label])=>`<button class="control-btn ${act==='auto'&&state.autoRotate?'active':''}" data-action="${act}" title="${label}"><span>${icon(ic)}</span> <span class="label">${label}</span></button>`).join('');
+}
+
+function loadingHTML(){
+  const status = state.loadError ? state.loadError : (state.modelUrlIndex > 0 ? t('modelFallback') : 'GLB · PBR · Three.js');
+  return `<div class="loading ${state.loading?'':'hidden'}" id="loadingOverlay"><div class="loading-card"><div class="silhouette"></div><h1>${t('loading')}</h1><p>${status}</p><div class="progress"><i style="width:${state.loadPercent}%"></i></div><div class="progress-meta"><span>${state.loadPercent}%</span><span>${state.modelUrlIndex===0?'Canon EOS RP':'Fallback asset'}</span></div>${state.loadError?`<div class="load-error">${state.loadError}<br><button class="action" id="retryLoad">${t('retry')}</button></div>`:''}</div></div>`;
+}
+
+function infoHTML(){
+  const c = state.selected;
+  if(!c) return `<div class="info-empty"><div><div class="orb"></div><strong>${state.lang==='fa'?'یک قطعه را انتخاب کنید':'Select a component'}</strong><p>${state.lang==='fa'?'از روی مدل، هات‌اسپات یا فهرست قطعات انتخاب کنید.':'Choose from the model, a hotspot, or the component tree.'}</p></div></div>`;
+  return `<div class="info-title"><div><h3>${tx(c.name)}</h3><p>${tx(c.short)}</p></div></div>
+    ${infoSection(t('function'),`<p>${tx(c.function)}</p>`)}
+    ${infoSection(t('specs'),`<ul>${c.specs[state.lang].map(x=>`<li>${x}</li>`).join('')}</ul>`)}
+    ${infoSection(t('howWorks'),`<p>${tx(c.how)}</p>`)}
+    ${infoSection(t('howUse'),`<p>${tx(c.use)}</p>`)}
+    ${infoSection(t('maintenanceTips'),`<p>${tx(c.maintenance)}</p>`)}
+    ${infoSection(t('commonProblems'),`<ul>${c.problems[state.lang].map(x=>`<li>${x}</li>`).join('')}</ul>`)}
+    ${infoSection(t('warnings'),`<p class="warning">${tx(c.warnings)}</p>`)}`;
+}
+function infoSection(title,content){return `<section class="info-section"><h4>${title}</h4>${content}</section>`}
+
+function modalHTML(){
+  if(!state.modal) return '';
+  let body=''; let title='';
+  if(state.modal==='maintenance'){
+    title=t('maintenance'); body=`<p>${t('maintenanceIntro')}</p><div class="cards">${['sensor','lens','mount','battery'].map(id=>{const c=findComponent(id);return `<div class="card"><h3>${tx(c.name)}</h3><p>${tx(c.maintenance)}</p><button class="action" data-focus="${id}">${t('explore')}</button></div>`}).join('')}</div>`;
+  } else if(state.modal==='troubleshooting'){
+    title=t('troubleshooting'); body=`<p>${t('troubleshootIntro')}</p><div class="cards">${troubleshooting.map(x=>`<div class="card"><h3>${tx(x.title)}</h3><p><strong>${state.lang==='fa'?'علت‌های احتمالی:':'Possible causes:'}</strong> ${x.causes[state.lang].join(' · ')}</p><p><strong>${state.lang==='fa'?'مراحل پیشنهادی:':'Suggested steps:'}</strong> ${x.steps[state.lang].join(' → ')}</p><button class="action" data-focus="${x.component}">${t('explore')}</button></div>`).join('')}</div>`;
+  } else if(state.modal==='how'){
+    title=t('guideTitle'); const step=batteryGuide[state.guideStep]; body=`<div class="card"><h3>${t('guideBattery')}</h3><div class="guide-step"><div class="step-index">${state.guideStep+1}</div><div><p>${step[state.lang]}</p><button class="action" id="guideNext">${state.guideStep===batteryGuide.length-1?t('finish'):t('next')}</button></div></div></div>`;
+  } else if(state.modal==='about'){
+    title=t('about'); body=`<p>${t('aboutText')}</p><div class="cards"><div class="card"><h3>${t('credits')}</h3><p>${t('modelSource')}: ${product.author} · ${product.license}</p><p>Fallback: ${product.fallbackCredit}</p><p>${t('library')}: Three.js, GLTFLoader, OrbitControls, CSS2DRenderer.</p><p><a href="${product.sourceUrl}" target="_blank" rel="noopener" style="color:var(--cyan)">Sketchfab source</a></p></div></div>`;
+  }
+  return `<div class="modal-layer" id="modalLayer"><div class="modal" role="dialog" aria-modal="true"><div class="modal-head"><h2>${title}</h2><button class="icon-btn" id="modalClose">${icon('close')}</button></div><div class="modal-body">${body}</div></div></div>`;
+}
+
+function bindUI(){
+  document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>setLanguage(b.dataset.lang));
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openView(b.dataset.view));
+  document.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>selectComponent(b.dataset.component,true));
+  document.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>handleAction(b.dataset.action));
+  document.querySelector('#fullscreenTop')?.addEventListener('click', toggleFullscreen);
+  document.querySelector('#creditsBtn')?.addEventListener('click',()=>openView('about'));
+  document.querySelector('#leftToggle')?.addEventListener('click',()=>toggleMobilePanel('left'));
+  document.querySelector('#rightToggle')?.addEventListener('click',()=>toggleMobilePanel('right'));
+  const search=document.querySelector('#searchInput'); if(search){search.addEventListener('input',()=>renderSearch(search.value)); search.addEventListener('keydown',e=>{if(e.key==='Escape')renderSearch('')});}
+  document.querySelector('#modalClose')?.addEventListener('click',closeModal);
+  document.querySelector('#modalLayer')?.addEventListener('click',e=>{if(e.target.id==='modalLayer')closeModal()});
+  document.querySelectorAll('[data-focus]').forEach(b=>b.onclick=()=>{selectComponent(b.dataset.focus,true); closeModal();});
+  document.querySelector('#guideNext')?.addEventListener('click',advanceGuide);
+  document.querySelector('#retryLoad')?.addEventListener('click',()=>{state.loadError=null; state.modelUrlIndex=0; state.loadPercent=0; refreshLoading(); loadModel();});
+}
+
+function refreshPanels(){
+  const left=document.querySelector('#leftPanel .panel-body'); if(left){left.innerHTML=leftPanelHTML(); const s=left.querySelector('#searchInput'); if(s)s.addEventListener('input',()=>renderSearch(s.value)); left.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>selectComponent(b.dataset.component,true));}
+  const right=document.querySelector('#infoBody'); if(right) right.innerHTML=infoHTML();
+  const h=document.querySelector('#rightPanel .panel-head h2'); if(h) h.textContent=state.selected?tx(state.selected.name):(state.lang==='fa'?'جزئیات فنی':'Technical details');
+  document.querySelector('.bottom-controls').innerHTML=controlsHTML(); document.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>handleAction(b.dataset.action));
+  updateHotspotLabels();
+}
+
+function setLanguage(lang){
+  state.lang=lang; localStorage.setItem('3dpm-lang',lang); const selection=state.selected?.id; const modal=state.modal; const guide=state.guideStep; teardownThree(); renderShell(); state.selected=selection?findComponent(selection):null; state.modal=modal; state.guideStep=guide; refreshPanels(); document.querySelector('#modalRoot').innerHTML=modalHTML(); bindUI();
+}
+function findComponent(id){return product.components.find(c=>c.id===id)}
+
+function renderSearch(q){
+  const box=document.querySelector('#searchResults'); if(!box)return; const text=q.trim().toLowerCase(); if(!text){box.innerHTML=''; return;}
+  const results=product.components.filter(c=>[tx(c.name),c.name.en,c.name.fa,...c.keywords].some(v=>v.toLowerCase().includes(text))).slice(0,8);
+  box.innerHTML=`<div class="search-results">${results.length?results.map(c=>`<button class="search-result" data-search-id="${c.id}">${tx(c.name)}</button>`).join(''):`<div class="search-result">${t('noResults')}</div>`}</div>`;
+  box.querySelectorAll('[data-search-id]').forEach(b=>b.onclick=()=>{selectComponent(b.dataset.searchId,true); box.innerHTML=''; const input=document.querySelector('#searchInput'); if(input)input.value='';});
+}
+
+function openView(view){
+  state.currentView=view;
+  if(view==='explore'||view==='components'){ state.modal=null; }
+  else if(view==='how'){state.modal='how'; state.guideStep=0; setTimeout(()=>selectComponent('battery',true),30);}
+  else if(['maintenance','troubleshooting','about'].includes(view)) state.modal=view;
+  document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+  document.querySelector('#modalRoot').innerHTML=modalHTML(); bindUI();
+}
+function closeModal(){state.modal=null; document.querySelector('#modalRoot').innerHTML='';}
+function advanceGuide(){
+  if(state.guideStep>=batteryGuide.length-1){state.guideStep=0; closeModal(); showToast(state.lang==='fa'?'راهنما کامل شد':'Guide complete'); return;}
+  state.guideStep++; selectComponent(batteryGuide[state.guideStep].component,true); document.querySelector('#modalRoot').innerHTML=modalHTML(); bindUI();
+}
+function toggleMobilePanel(side){
+  const p=document.querySelector(side==='left'?'#leftPanel':'#rightPanel'); const other=document.querySelector(side==='left'?'#rightPanel':'#leftPanel'); other?.classList.remove('open'); p?.classList.toggle('open');
+}
+
+function setupThree(){
+  const host=document.querySelector('#viewer'); if(!host || renderer)return;
+  scene=new THREE.Scene();
+  clock=new THREE.Clock();
+  camera=new THREE.PerspectiveCamera(38,1,.05,100); camera.position.set(4.5,2.6,5.6);
+  renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05; renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; host.prepend(renderer.domElement);
+  labelRenderer=new CSS2DRenderer(); labelRenderer.setSize(host.clientWidth,host.clientHeight); labelRenderer.domElement.style.position='absolute'; labelRenderer.domElement.style.inset='0'; labelRenderer.domElement.style.pointerEvents='none'; host.appendChild(labelRenderer.domElement);
+  controls=new OrbitControls(camera,renderer.domElement); controls.enableDamping=true; controls.dampingFactor=.055; controls.minDistance=2.2; controls.maxDistance=9; controls.target.set(0,0,0); controls.autoRotate=false; controls.autoRotateSpeed=.7;
+  controls.addEventListener('start',()=>{state.focusAnim=null});
+  const pmrem=new THREE.PMREMGenerator(renderer); const env=new RoomEnvironment(); scene.environment=pmrem.fromScene(env,.04).texture; pmrem.dispose(); env.dispose();
+  scene.add(new THREE.HemisphereLight(0xbfe8ff,0x17202c,1.0));
+  const key=new THREE.DirectionalLight(0xdaf5ff,3.1); key.position.set(4,6,5); key.castShadow=true; key.shadow.mapSize.set(1024,1024); scene.add(key);
+  const fill=new THREE.DirectionalLight(0x7ea9ff,1.4); fill.position.set(-5,2,3); scene.add(fill);
+  const rim=new THREE.DirectionalLight(0x6fe8ff,1.8); rim.position.set(2,1,-5); scene.add(rim);
+  const floor=new THREE.Mesh(new THREE.CircleGeometry(5,64),new THREE.MeshStandardMaterial({color:0x0d151e,roughness:.45,metalness:.15,transparent:true,opacity:.72})); floor.rotation.x=-Math.PI/2; floor.position.y=-1.55; floor.receiveShadow=true; scene.add(floor);
+  raycaster=new THREE.Raycaster(); pointer=new THREE.Vector2(); renderer.domElement.addEventListener('pointerdown',onPointerDown);
+  resizeObserver=new ResizeObserver(resize); resizeObserver.observe(host); resize(); renderer.setAnimationLoop(animate); loadModel();
+}
+
+function teardownThree(){
+  resizeObserver?.disconnect(); resizeObserver=null;
+  if(renderer){renderer.setAnimationLoop(null); renderer.domElement.removeEventListener('pointerdown',onPointerDown); renderer.dispose(); renderer.domElement.remove();}
+  labelRenderer?.domElement.remove(); renderer=null; labelRenderer=null; scene=null; camera=null; controls=null; state.model=null; state.normalizedRoot=null; state.meshes=[]; state.meshOriginals.clear(); state.hotspotObjects.clear(); state.associatedMeshes.clear();
+}
+function resize(){const host=document.querySelector('#viewer'); if(!host||!renderer)return; const w=host.clientWidth,h=host.clientHeight; renderer.setSize(w,h,false); labelRenderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix();}
+
+function loadModel(){
+  if(!scene)return; state.loading=true; state.loadError=null; refreshLoading();
+  if(state.model){scene.remove(state.model); state.model=null;}
+  const url=product.modelUrls[state.modelUrlIndex]; const loader=new GLTFLoader();
+  loader.load(url,gltf=>{prepareModel(gltf.scene); state.loading=false; state.loadPercent=100; refreshLoading();},progress=>{
+    if(progress.total){state.loadPercent=Math.max(2,Math.min(99,Math.round(progress.loaded/progress.total*100)));} else state.loadPercent=Math.min(92,state.loadPercent+2); refreshLoading();
+  },err=>{
+    console.warn('Model load failed',url,err);
+    if(state.modelUrlIndex<product.modelUrls.length-1){state.modelUrlIndex++; state.loadPercent=0; refreshLoading(); loadModel();}
+    else {state.loadError=state.lang==='fa'?'مدل سه‌بعدی بارگذاری نشد. اتصال اینترنت و CORS را بررسی کنید.':'The 3D model could not be loaded. Check network access and CORS.'; refreshLoading();}
+  });
+}
+function refreshLoading(){
+  const current=document.querySelector('#loadingOverlay'); if(!current)return; const temp=document.createElement('div'); temp.innerHTML=loadingHTML(); current.replaceWith(temp.firstElementChild); document.querySelector('#retryLoad')?.addEventListener('click',()=>{state.loadError=null;state.modelUrlIndex=0;state.loadPercent=0;loadModel();});
+}
+
+function prepareModel(root){
+  const wrapper=new THREE.Group(); wrapper.name='ProductRoot'; wrapper.add(root); scene.add(wrapper); state.model=wrapper; state.normalizedRoot=root;
+  const box=new THREE.Box3().setFromObject(root); const size=box.getSize(new THREE.Vector3()); const center=box.getCenter(new THREE.Vector3()); const scale=3.6/Math.max(size.x,size.y,size.z); root.scale.setScalar(scale); root.position.copy(center).multiplyScalar(-scale); root.updateMatrixWorld(true);
+  const box2=new THREE.Box3().setFromObject(root); const c2=box2.getCenter(new THREE.Vector3()); root.position.sub(c2); root.updateMatrixWorld(true);
+  state.meshes=[]; root.traverse(obj=>{if(obj.isMesh){obj.castShadow=true;obj.receiveShadow=true;obj.frustumCulled=true; state.meshes.push(obj); state.meshOriginals.set(obj,{position:obj.position.clone(),material:obj.material}); if(Array.isArray(obj.material))obj.material=obj.material.map(m=>m.clone()); else if(obj.material)obj.material=obj.material.clone();}});
+  createHotspots(); associateMeshes(); controls.target.set(0,0,0); camera.position.set(4.4,2.5,5.2); controls.update();
+}
+
+function hotspotPosition(comp){
+  const [x,y,z]=comp.hotspot; return new THREE.Vector3(x*2.5,y*2.5,z*2.5);
+}
+function createHotspots(){
+  for(const obj of state.hotspotObjects.values()) obj.parent?.remove(obj); state.hotspotObjects.clear();
+  product.components.forEach(comp=>{
+    const el=document.createElement('button'); el.className='hotspot'; el.dataset.id=comp.id; el.innerHTML=`<i class="hotspot-pulse"></i><span class="hotspot-label">${tx(comp.name)}</span>`; el.style.pointerEvents='auto'; el.addEventListener('click',e=>{e.stopPropagation();selectComponent(comp.id,true);});
+    const label=new CSS2DObject(el); label.position.copy(hotspotPosition(comp)); state.model.add(label); state.hotspotObjects.set(comp.id,label);
+  });
+}
+function updateHotspotLabels(){state.hotspotObjects.forEach((o,id)=>{const el=o.element; const comp=findComponent(id); const s=el.querySelector('.hotspot-label'); if(s)s.textContent=tx(comp.name); el.classList.toggle('active',state.selected?.id===id);});}
+function associateMeshes(){
+  state.associatedMeshes.clear(); state.model.updateMatrixWorld(true);
+  for(const comp of product.components){
+    const hp=hotspotPosition(comp).clone(); state.model.localToWorld(hp); let best=null,bestD=Infinity;
+    for(const mesh of state.meshes){const b=new THREE.Box3().setFromObject(mesh); if(b.isEmpty())continue; const p=b.getCenter(new THREE.Vector3()); const d=p.distanceToSquared(hp); if(d<bestD){bestD=d;best=mesh;}}
+    if(best) state.associatedMeshes.set(comp.id,best);
+  }
+}
+
+function selectComponent(id,focus=false){
+  const c=findComponent(id); if(!c)return; state.selected=c; restoreHighlight(); const mesh=state.associatedMeshes.get(id); if(mesh) highlightMesh(mesh); updateHotspotLabels(); refreshPanels();
+  if(focus) focusComponent(c,mesh); if(innerWidth<=900){document.querySelector('#rightPanel')?.classList.add('open'); document.querySelector('#leftPanel')?.classList.remove('open');}
+}
+function highlightMesh(mesh){
+  const mats=Array.isArray(mesh.material)?mesh.material:[mesh.material]; selectedMaterialRestore=[];
+  mats.forEach(m=>{if(!m)return; selectedMaterialRestore.push({m,emissive:m.emissive?.clone(),emissiveIntensity:m.emissiveIntensity,color:m.color?.clone()}); if(m.emissive){m.emissive.set(0x143f50);m.emissiveIntensity=.75;} else if(m.color){m.color.offsetHSL(0,.05,.08)} m.needsUpdate=true;});
+}
+function restoreHighlight(){selectedMaterialRestore.forEach(r=>{if(r.emissive&&r.m.emissive)r.m.emissive.copy(r.emissive); if(typeof r.emissiveIntensity==='number')r.m.emissiveIntensity=r.emissiveIntensity; if(r.color&&r.m.color)r.m.color.copy(r.color); r.m.needsUpdate=true;}); selectedMaterialRestore=[];}
+function focusComponent(comp,mesh){
+  let target=hotspotPosition(comp); if(mesh){const b=new THREE.Box3().setFromObject(mesh); target=b.getCenter(new THREE.Vector3());} else state.model.localToWorld(target);
+  const currentTarget=controls.target.clone(); const dir=camera.position.clone().sub(currentTarget).normalize(); const distance=Math.max(2.35,Math.min(4.2,camera.position.distanceTo(currentTarget)*.72)); const nextPos=target.clone().add(dir.multiplyScalar(distance)).add(new THREE.Vector3(0,.25,0));
+  state.focusAnim={start:performance.now(),duration:reduceMotion?1:750,fromPos:camera.position.clone(),toPos:nextPos,fromTarget:currentTarget,toTarget:target.clone()};
+}
+
+function onPointerDown(e){
+  if(!state.meshes.length)return; const rect=renderer.domElement.getBoundingClientRect(); pointer.x=((e.clientX-rect.left)/rect.width)*2-1; pointer.y=-((e.clientY-rect.top)/rect.height)*2+1; raycaster.setFromCamera(pointer,camera); const hits=raycaster.intersectObjects(state.meshes,true); if(!hits.length)return;
+  const p=hits[0].point; let best=null,bestD=Infinity; for(const comp of product.components){const hp=hotspotPosition(comp); state.model.localToWorld(hp); const d=hp.distanceToSquared(p); if(d<bestD){bestD=d;best=comp;}} if(best)selectComponent(best.id,true);
+}
+
+function handleAction(action){
+  if(action==='reset')resetCamera(); else if(action==='explode')setExploded(true); else if(action==='assemble')setExploded(false); else if(action==='auto'){state.autoRotate=!state.autoRotate;controls.autoRotate=state.autoRotate;refreshPanels();} else if(action==='full')toggleFullscreen();
+}
+function resetCamera(){state.focusAnim={start:performance.now(),duration:reduceMotion?1:700,fromPos:camera.position.clone(),toPos:new THREE.Vector3(4.4,2.5,5.2),fromTarget:controls.target.clone(),toTarget:new THREE.Vector3(0,0,0)};}
+function setExploded(on){
+  state.exploded=on; const modelCenter=new THREE.Box3().setFromObject(state.normalizedRoot).getCenter(new THREE.Vector3());
+  state.meshes.forEach((mesh,i)=>{const original=state.meshOriginals.get(mesh)?.position?.clone()||mesh.position.clone(); mesh.userData.explodeFrom=mesh.position.clone(); let dir=new THREE.Vector3(); const b=new THREE.Box3().setFromObject(mesh); const wc=b.getCenter(new THREE.Vector3()); dir.copy(wc).sub(modelCenter); if(dir.lengthSq()<.0001)dir.set(Math.sin(i*1.7),Math.cos(i*.8)*.5,Math.cos(i*1.3)); dir.normalize(); const parent=mesh.parent; const startWorld=wc.clone(); const endWorld=wc.clone().add(dir.multiplyScalar(.55+Math.min(1.1,b.getSize(new THREE.Vector3()).length()*.16))); const p1=parent.worldToLocal(startWorld.clone()); const p2=parent.worldToLocal(endWorld.clone()); const localOffset=p2.sub(p1); mesh.userData.explodeTo=on?original.clone().add(localOffset):original; mesh.userData.explodeT=0;}); refreshPanels();
+}
+function updateExplosion(dt){
+  let changed=false; for(const mesh of state.meshes){if(!mesh.userData.explodeTo||mesh.userData.explodeT>=1)continue; const from=mesh.userData.explodeFrom; const to=mesh.userData.explodeTo; mesh.userData.explodeT=Math.min(1,mesh.userData.explodeT+dt*(reduceMotion?20:2.1)); const k=ease(mesh.userData.explodeT); mesh.position.lerpVectors(from,to,k); changed=true;} if(changed){state.model.updateMatrixWorld(true); state.hotspotObjects.forEach((o,id)=>{const mesh=state.associatedMeshes.get(id); if(mesh){const b=new THREE.Box3().setFromObject(mesh); const world=b.getCenter(new THREE.Vector3()); state.model.worldToLocal(world); o.position.copy(world);}});}
+}
+function toggleFullscreen(){const el=document.querySelector('.app-shell'); if(!document.fullscreenElement)el.requestFullscreen?.(); else document.exitFullscreen?.();}
+function ease(x){return 1-Math.pow(1-x,3)}
+
+function animate(){
+  if(!renderer)return; const dt=Math.min(clock.getDelta(),.05); controls.update(); updateExplosion(dt);
+  if(state.focusAnim){const a=state.focusAnim; const p=Math.min(1,(performance.now()-a.start)/a.duration); const k=ease(p); camera.position.lerpVectors(a.fromPos,a.toPos,k); controls.target.lerpVectors(a.fromTarget,a.toTarget,k); if(p>=1)state.focusAnim=null;}
+  renderer.render(scene,camera); labelRenderer.render(scene,camera);
+}
+
+function showToast(msg){const e=document.querySelector('#toast'); if(!e)return;e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
+
+renderShell();
+
+  </script>
+</body>
+</html>
