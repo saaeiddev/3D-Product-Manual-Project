@@ -1,52 +1,89 @@
 # 3D Product Manual Project
 
-A premium bilingual (English / Persian) interactive 3D product manual built with Three.js and deployed on GitHub Pages.
+A multi-product interactive 3D product manual built for GitHub Pages.
 
-## Live experience
+## What changed in this version
 
-The site is designed around a high-quality 3D mirrorless camera viewer with a futuristic glass interface. Users can rotate, zoom, pan, select parts, inspect hotspots, search components in English or Persian, switch RTL/LTR, use exploded view, read maintenance and troubleshooting information, and follow interactive guides.
+This is no longer a single-camera demo. The site is structured as an **Industrial Product Lab** with a deliberately different visual identity from the previous glass/cyan interfaces.
 
-## Core features
+### Product library
 
-- Real interactive GLB/GLTF rendering with Three.js
-- Canon EOS RP demo model with automatic fallback model
-- 360° orbit, zoom, pan, smooth focus, reset and auto-rotate
-- Interactive hotspots and component highlighting
-- Exploded / assemble view
-- Bilingual English + Persian interface
-- Correct Persian RTL layout and language persistence
-- Searchable component tree
-- Technical specs, usage, warnings and maintenance details
-- Troubleshooting workflows linked to 3D parts
-- Step-by-step battery replacement guide
-- Fullscreen and responsive mobile/tablet experience
-- Premium cinematic glassmorphism UI
-- GitHub Pages automatic deployment workflow
+1. Canon EOS RP camera
+2. iPhone device
+3. MacBook laptop
+4. Ferrari F40
+5. Automotive engine
+6. Medical stethoscope
+7. Adaptive power wheelchair
 
-## 3D asset credits
+## Interaction
 
-- **Canon EOS RP Mirrorless Camera** — `fahadratul` — CC BY 4.0 — Sketchfab
-- **Antique Camera fallback** — UX3D / Maximillan Kamps — CC0 1.0 — Khronos glTF Sample Assets
-- **Three.js** — MIT License
+- Real Three.js GLB loading
+- Orbit, zoom and rotate
+- Product switching
+- Product-specific component maps
+- Raycast selection on the actual 3D model
+- Distinct camera focus per component
+- Nearest-mesh highlight per selected component
+- Component hotspots attached to the corresponding mesh
+- Animated exploded / assembled view using the real meshes
+- Auto rotate
+- English / Persian UI
+- RTL Persian layout
+- Mobile product and information drawers
+- Searchable component list
+- Actual loading progress and model-source fallback where available
 
-Third-party 3D assets remain governed by their own licenses.
+## Visual direction
 
-## Development
+The current UI intentionally avoids the repeated dark blue glassmorphism language used in earlier projects. It uses an **industrial editorial / product-design-lab** direction:
 
-The production website is intentionally self-contained in `index.html` for reliable GitHub Pages deployment. Three.js is loaded as version-pinned browser ES modules from jsDelivr.
+- warm paper background
+- charcoal 3D stage
+- safety-orange accent
+- acid-lime status accent
+- technical grid
+- hard borders
+- numbered product catalog
+- editorial typography
 
-To test locally, serve the repository over HTTP instead of opening the file with `file://`:
+## 3D asset sources
 
-```bash
-python3 -m http.server 4173
-```
+The project loads web-ready GLB assets from traceable public sources.
 
-Then open `http://localhost:4173`.
+- **Canon EOS RP** — fahadratul / SceneView, CC BY 4.0
+- **Camera fallback** — Khronos glTF Sample Assets
+- **iPhone device + MacBook** — HyperFrames repository device assets
+- **Smartphone fallback** — ToonStudio original smartphone, CC0 1.0
+- **Ferrari F40** — Black Snow / SceneView, CC BY 4.0
+- **Car fallback** — Khronos ToyCar, CC BY 4.0
+- **Engine** — A-Frame example asset
+- **Medical stethoscope** — ToonStudio original asset, CC0 1.0
+- **Adaptive power wheelchair** — ToonStudio original asset, CC0 1.0
+
+External model assets remain subject to their respective source licenses and attribution requirements.
 
 ## Deployment
 
-Every push to `main` triggers `.github/workflows/pages.yml`, which configures and deploys the repository to GitHub Pages.
+GitHub Pages deploys automatically from `main` through:
 
----
+`.github/workflows/pages.yml`
 
-Created as **3D Product Manual Project**.
+Live site:
+
+https://saaeiddev.github.io/3D-Product-Manual-Project/
+
+## Tech
+
+- HTML
+- CSS
+- JavaScript
+- Three.js
+- GLTFLoader
+- OrbitControls
+- CSS2DRenderer
+- GitHub Pages
+
+## Repository
+
+https://github.com/saaeiddev/3D-Product-Manual-Project
