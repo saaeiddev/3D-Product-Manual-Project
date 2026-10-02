@@ -83,11 +83,154 @@ html[dir="rtl"] .tool::after{
   right:auto;left:5px;transform:rotate(45deg);
 }
 
+
+/* ===== Industrial Home Page ===== */
+#homePage{
+  position:fixed;inset:0;z-index:1000;overflow:hidden;
+  background:var(--paper);color:var(--ink);
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;
+  isolation:isolate;
+}
+#homePage::before{
+  content:"";position:absolute;inset:0;z-index:-3;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(23,24,21,.055) 1px,transparent 1px),
+    linear-gradient(rgba(23,24,21,.055) 1px,transparent 1px);
+  background-size:54px 54px;
+}
+#homePage::after{
+  content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(217,255,67,.16),transparent 24%),
+    linear-gradient(115deg,transparent 0 46%,rgba(255,90,31,.08) 46% 54%,transparent 54% 100%);
+}
+.home-top{
+  min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:14px 22px;border-bottom:1px solid var(--ink);background:rgba(241,237,228,.92);
+}
+.home-brand{display:flex;align-items:center;gap:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.home-mark{
+  width:42px;height:42px;display:grid;place-items:center;background:var(--ink);color:var(--accent-2);
+  font-size:11px;font-weight:1000;
+  clip-path:polygon(10px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 10px),calc(100% - 10px) 100%,6px 100%,0 calc(100% - 6px),0 10px);
+}
+.home-brand-copy b{display:block;font-size:12px;line-height:1}.home-brand-copy span{display:block;font:9px/1.2 monospace;color:var(--muted);margin-top:4px}
+.home-enter{
+  --cut:11px;border:1px solid var(--ink);background:var(--accent-2);color:var(--ink);
+  padding:11px 16px;font-size:10px;font-weight:1000;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  clip-path:polygon(var(--cut) 0,calc(100% - var(--cut)) 0,100% var(--cut),100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,var(--cut) 100%,0 calc(100% - var(--cut)),0 var(--cut));
+  transition:transform .16s,background .16s,color .16s;
+}
+.home-enter:hover{background:var(--accent);color:white;transform:translateY(-2px)}
+.home-main{
+  min-height:0;display:grid;grid-template-rows:auto minmax(260px,1fr);align-items:center;
+  padding:20px clamp(16px,4vw,54px) 8px;position:relative;
+}
+.home-title-wrap{text-align:center;position:relative;z-index:4;padding-top:2px}
+.home-kicker{
+  display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--white);
+  padding:6px 10px;font:900 9px/1 monospace;letter-spacing:.18em;text-transform:uppercase;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+}
+.home-kicker::before{content:"";width:7px;height:7px;background:var(--accent)}
+.home-title{
+  position:relative;margin:12px auto 0;max-width:1100px;
+  font-family:"Arial Black",Impact,Arial,sans-serif;
+  font-size:clamp(42px,8.1vw,112px);line-height:.78;
+  letter-spacing:-.075em;text-transform:uppercase;
+  color:var(--paper);
+  -webkit-text-stroke:2px var(--ink);
+  text-shadow:
+    1px 1px 0 var(--ink),2px 2px 0 var(--ink),3px 3px 0 var(--ink),
+    4px 4px 0 var(--ink),5px 5px 0 var(--ink),6px 6px 0 var(--ink),
+    7px 7px 0 var(--accent),8px 8px 0 var(--accent),9px 9px 0 var(--accent),
+    10px 10px 0 var(--ink);
+  transform:skewX(-3deg);
+  filter:drop-shadow(10px 14px 0 rgba(23,24,21,.10));
+}
+.home-title .lime{-webkit-text-stroke-color:var(--ink);color:var(--accent-2)}
+.home-model-zone{
+  min-height:260px;position:relative;width:min(980px,100%);height:100%;margin:0 auto;
+}
+.home-model-frame{
+  position:absolute;inset:12px 0 8px;
+  background:var(--stage);border:1px solid var(--ink);
+  clip-path:polygon(24px 0,calc(100% - 24px) 0,100% 24px,100% calc(100% - 24px),calc(100% - 24px) 100%,24px 100%,0 calc(100% - 24px),0 24px);
+  overflow:hidden;
+  box-shadow:10px 10px 0 rgba(23,24,21,.14);
+}
+.home-model-frame::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+#homeThree{position:absolute;inset:0;z-index:1}
+.home-model-label{
+  position:absolute;z-index:5;left:18px;top:18px;background:var(--accent);color:white;
+  padding:7px 10px;font:900 9px/1 monospace;letter-spacing:.12em;text-transform:uppercase;
+  clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);
+}
+.home-model-help{
+  position:absolute;z-index:5;right:18px;bottom:17px;color:#d1d0c8;background:rgba(18,19,15,.88);
+  border:1px solid #66675f;padding:7px 9px;font:9px/1.3 monospace;letter-spacing:.06em;text-transform:uppercase;
+}
+.home-load{
+  position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:var(--stage);color:var(--white);
+  font:900 10px/1 monospace;letter-spacing:.16em;text-transform:uppercase;
+}
+.home-load span{display:inline-block;border:1px solid #5f6058;padding:12px 14px;background:#1d1e19}
+.home-footer{
+  min-height:52px;border-top:1px solid var(--ink);display:flex;align-items:center;justify-content:center;
+  padding:10px 18px;background:rgba(241,237,228,.94);
+}
+.home-credit{
+  font-family:"Arial Black",Impact,Arial,sans-serif;font-size:clamp(11px,1.55vw,18px);
+  font-weight:1000;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+  text-shadow:2px 2px 0 var(--accent-2);
+  transform:skewX(-4deg);
+}
+@media(max-width:720px){
+  .home-top{min-height:62px;padding:10px 12px}
+  .home-brand-copy span{display:none}
+  .home-enter{padding:10px 12px;font-size:9px}
+  .home-main{padding:18px 10px 6px;grid-template-rows:auto minmax(280px,1fr)}
+  .home-title{font-size:clamp(38px,14vw,68px);line-height:.83;-webkit-text-stroke-width:1.5px;text-shadow:1px 1px 0 var(--ink),2px 2px 0 var(--ink),3px 3px 0 var(--ink),4px 4px 0 var(--accent),5px 5px 0 var(--ink)}
+  .home-model-frame{inset:14px 0 5px}
+  .home-model-help{right:12px;bottom:12px;font-size:8px}
+  .home-model-label{left:12px;top:12px}
+}
+
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
 </head>
 <body>
-<div id="app"></div>
+<section id="homePage" aria-label="3D Product Manual Project home">
+  <header class="home-top">
+    <div class="home-brand">
+      <div class="home-mark">3D</div>
+      <div class="home-brand-copy"><b>Industrial Object Intelligence</b><span>INTERACTIVE TECHNICAL PRODUCT LAB</span></div>
+    </div>
+    <button class="home-enter" id="enterLab">Enter Product Lab ↗</button>
+  </header>
+  <main class="home-main">
+    <div class="home-title-wrap">
+      <div class="home-kicker">Interactive Industrial Manual</div>
+      <h1 class="home-title">3D Product<br><span class="lime">Manual Project</span></h1>
+    </div>
+    <div class="home-model-zone">
+      <div class="home-model-frame">
+        <div id="homeThree"></div>
+        <div class="home-model-label">V8 · Interactive Engine</div>
+        <div class="home-model-help">Drag to rotate · Scroll / pinch to zoom</div>
+        <div class="home-load" id="homeLoad"><span>Loading V8 Engine…</span></div>
+      </div>
+    </div>
+  </main>
+  <footer class="home-footer"><div class="home-credit">Created By Amir Saeid Dehghan</div></footer>
+</section>
+<div id="app" hidden></div>
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -265,6 +408,57 @@ const dracoLoader=new DRACOLoader();
 dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/libs/draco/');
 loader.setDRACOLoader(dracoLoader);
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let homeRenderer,homeScene,homeCamera,homeControls,homeRoot,homeResizeObserver,homeRAF;
+function initHomePage(){
+ const host=document.querySelector('#homeThree'),enter=document.querySelector('#enterLab');if(!host)return;
+ homeScene=new THREE.Scene();homeScene.background=new THREE.Color(0x161713);
+ homeCamera=new THREE.PerspectiveCamera(34,1,.01,100);homeCamera.position.set(3.7,2.1,5.1);
+ homeRenderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+ homeRenderer.setPixelRatio(Math.min(devicePixelRatio,2));homeRenderer.outputColorSpace=THREE.SRGBColorSpace;
+ homeRenderer.toneMapping=THREE.ACESFilmicToneMapping;homeRenderer.toneMappingExposure=1.12;
+ homeRenderer.shadowMap.enabled=true;homeRenderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ homeRenderer.domElement.style.width='100%';homeRenderer.domElement.style.height='100%';homeRenderer.domElement.style.display='block';host.appendChild(homeRenderer.domElement);
+ const pmrem=new THREE.PMREMGenerator(homeRenderer);homeScene.environment=pmrem.fromScene(new RoomEnvironment(homeRenderer),.04).texture;pmrem.dispose();
+ homeScene.add(new THREE.HemisphereLight(0xfff4dc,0x151610,1.75));
+ const key=new THREE.DirectionalLight(0xffe2c4,5.2);key.position.set(4,6,5);key.castShadow=true;homeScene.add(key);
+ const rim=new THREE.DirectionalLight(0xff5a1f,3.8);rim.position.set(-5,2,-4);homeScene.add(rim);
+ const acid=new THREE.DirectionalLight(0xd9ff43,1.25);acid.position.set(2,-1,-4);homeScene.add(acid);
+ const floor=new THREE.Mesh(new THREE.CircleGeometry(2.65,64),new THREE.MeshStandardMaterial({color:0x22231e,roughness:.76,metalness:.08}));
+ floor.rotation.x=-Math.PI/2;floor.position.y=-1.3;floor.receiveShadow=true;homeScene.add(floor);
+ homeControls=new OrbitControls(homeCamera,homeRenderer.domElement);homeControls.enableDamping=true;homeControls.dampingFactor=.065;homeControls.minDistance=2.2;homeControls.maxDistance=8;homeControls.target.set(0,0,0);
+ const homeLoader=new GLTFLoader();const homeDraco=new DRACOLoader();homeDraco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/libs/draco/');homeLoader.setDRACOLoader(homeDraco);
+ const engineURL='https://raw.githubusercontent.com/johnnyhuy/vibes/main/experiments/v8-cutaway/public/models/v8-engine.glb';
+ homeLoader.load(engineURL,g=>{
+   const m=g.scene;homeRoot=new THREE.Group();homeScene.add(homeRoot);homeRoot.add(m);m.updateMatrixWorld(true);
+   let box=new THREE.Box3().setFromObject(m),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
+   const max=Math.max(size.x,size.y,size.z)||1,scale=2.55/max;m.scale.setScalar(scale);m.position.sub(center.multiplyScalar(scale));m.updateMatrixWorld(true);
+   homeRoot.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});
+   const b=new THREE.Box3().setFromObject(homeRoot),s=b.getSize(new THREE.Vector3()),ct=b.getCenter(new THREE.Vector3());
+   homeControls.target.copy(ct);const radius=s.length()*.62,dir=new THREE.Vector3(1.05,.58,1.55).normalize();
+   homeCamera.position.copy(ct).add(dir.multiplyScalar(Math.max(3.2,radius*2.05)));homeControls.update();
+   document.querySelector('#homeLoad')?.remove();
+ },undefined,err=>{
+   const l=document.querySelector('#homeLoad');if(l)l.innerHTML='<span>V8 model could not load · Retry by refreshing</span>';
+   console.warn('Home V8 load failed',err);
+ });
+ const resizeHome=()=>{if(!homeRenderer||!host)return;const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);homeRenderer.setSize(w,h,false);homeCamera.aspect=w/h;homeCamera.updateProjectionMatrix()};
+ homeResizeObserver=new ResizeObserver(resizeHome);homeResizeObserver.observe(host);resizeHome();
+ const homeLoop=()=>{homeRAF=requestAnimationFrame(homeLoop);if(!homeRenderer)return;homeControls.update();homeRenderer.render(homeScene,homeCamera)};homeLoop();
+ enter?.addEventListener('click',enterProductLab);
+}
+function destroyHomePage(){
+ if(homeRAF)cancelAnimationFrame(homeRAF);homeResizeObserver?.disconnect();homeControls?.dispose();
+ if(homeRoot){homeRoot.traverse(o=>{if(o.geometry)o.geometry.dispose?.();if(o.material){const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>m.dispose?.())}})}
+ homeRenderer?.dispose();homeRenderer?.domElement?.remove();
+ homeRenderer=homeScene=homeCamera=homeControls=homeRoot=null;
+}
+function enterProductLab(){
+ destroyHomePage();
+ document.querySelector('#homePage')?.remove();
+ const app=document.querySelector('#app');if(app){app.hidden=false;shell()}
+}
+
 const product=()=>PRODUCTS.find(p=>p.id===state.productId)||PRODUCTS[0];
 const tx=o=>o?.[state.lang]??o?.en??''; const t=k=>UI[state.lang][k]||k;
 const comp=id=>product().components.find(c=>c[0]===id);
@@ -485,7 +679,7 @@ function loop(now=performance.now()){
 }
 function destroyThree(){if(raf)cancelAnimationFrame(raf);resizeObserver?.disconnect();clearModel();controls?.dispose();renderer?.dispose();renderer?.domElement?.remove();labelRenderer?.domElement?.remove();renderer=labelRenderer=scene=camera=controls=null;hotspotObjects.clear()}
 
-shell();
+initHomePage();
 </script>
 </body>
 </html>
