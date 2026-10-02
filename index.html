@@ -157,9 +157,35 @@ const UI={
  fa:{catalog:'کاتالوگ محصولات',catalogSub:'یک سیستم را برای بررسی انتخاب کنید',library:'۷ مطالعه سه‌بعدی تعاملی',components:'اجزا',function:'عملکرد',details:'نکات فنی',source:'منبع مدل',search:'جست‌وجوی اجزا…',explode:'بازکردن اجزا',assemble:'مونتاژ',reset:'بازنشانی',auto:'چرخش خودکار',hotspots:'نقاط تعاملی',focus:'تمرکز',loading:'در حال بارگذاری مدل سه‌بعدی',clickHint:'روی مدل یا نقاط تعاملی کلیک کنید',ready:'مدل آماده است',failed:'منبع مدل سه‌بعدی بارگذاری نشد.',retry:'تلاش مجدد',mesh:'مش',part:'قطعه'}
 };
 
+
+const MESH_HINTS={
+ camera:{
+  lens:['lens','optical','glass','barrel','rf'],sensor:['sensor','cmos','image plane'],viewfinder:['viewfinder','finder','evf','eyecup'],dial:['dial','mode','wheel'],grip:['grip','handle','battery'],ports:['port','usb','hdmi','audio','mic']
+ },
+ iphone:{
+  display:['display','screen','glass','front'],camera:['camera','lens','flash','bump'],side:['button','side','power'],port:['usb','typec','connector','port'],frame:['frame','body','case','chassis','aluminium','aluminum'],speaker:['speaker','grille','grill','audio']
+ },
+ laptop:{
+  screen:['screen','display','lid','panel'],keyboard:['keyboard','key','keys'],trackpad:['trackpad','touchpad','pad'],hinge:['hinge','joint'],ports:['port','usb','connector','jack'],chassis:['base','body','case','chassis','unibody']
+ },
+ car:{
+  front:['front','bumper','hood','bonnet','headlight'],wheelF:['front wheel','wheel_fl','wheel_lf','tire_fl','tyre_fl'],cabin:['cabin','glass','windshield','windscreen','seat','interior'],engineBay:['engine','rear','cover','bay'],wheelR:['rear wheel','wheel_rl','wheel_lr','tire_rl','tyre_rl'],wing:['wing','spoiler']
+ },
+ engine:{
+  top:['top','cover','head','valve'],intake:['intake','inlet','air'],block:['block','cylinder','crankcase','body'],pulley:['pulley','belt','wheel','drive'],sump:['sump','oil','pan','lower'],exhaust:['exhaust','manifold','outlet']
+ },
+ stethoscope:{
+  tips:['ear','tip','earpiece'],binaural:['binaural','yoke','metal','ear tube'],tube:['tube','tubing','hose','flex'],stem:['stem','connector','joint'],chest:['chest','chestpiece','bell','head'],dia:['diaphragm','membrane','ring']
+ },
+ wheelchair:{
+  seat:['seat','cushion','backrest'],joystick:['joystick','control','controller'],drive:['drive','motor','hub'],wheel:['wheel','tire','tyre','rim'],foot:['foot','footrest','plate'],battery:['battery','power','pack']
+ }
+};
+
 const state={lang:localStorage.getItem('pm-lang')==='fa'?'fa':'en',productId:localStorage.getItem('pm-product')||'camera',selectedId:null,auto:false,exploded:false,hotspots:true,loading:true,error:null,progress:0,modelIndex:0,mobilePanel:null};
 let renderer,labelRenderer,scene,camera,controls,root,modelBox,modelSize,modelCenter,raycaster,pointer,resizeObserver,raf,focusAnim;
-let meshes=[], meshState=new Map(), hotspotObjects=new Map(), highlighted=[];
+let meshes=[], meshState=new Map(), hotspotObjects=new Map(), highlighted=[], associations=new Map(), meshToComponent=new Map();
+let explodeT=0, explodeGoal=0, lastFrame=performance.now();
 let explodeAnim=null;
 const loader=new GLTFLoader();
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -202,7 +228,7 @@ function bindUI(){
 }
 function togglePanel(which){state.mobilePanel=state.mobilePanel===which?null:which;document.querySelector('#productRail')?.classList.toggle('open',state.mobilePanel==='products');document.querySelector('#inspector')?.classList.toggle('open',state.mobilePanel==='info')}
 function filterComponents(q){const needle=q.trim().toLowerCase();document.querySelectorAll('.component-btn').forEach((b,i)=>{const c=product().components[i];b.style.display=!needle||[tx(c[1]),c[1].en,c[1].fa,...c[4]].join(' ').toLowerCase().includes(needle)?'grid':'none'})}
-function switchProduct(id){if(id===state.productId)return;state.productId=id;state.selectedId=null;state.exploded=false;state.modelIndex=0;state.progress=0;state.error=null;state.loading=true;localStorage.setItem('pm-product',id);destroyThree();shell()}
+function switchProduct(id){if(id===state.productId)return;state.productId=id;state.selectedId=null;state.exploded=false;explodeT=0;explodeGoal=0;state.modelIndex=0;state.progress=0;state.error=null;state.loading=true;localStorage.setItem('pm-product',id);destroyThree();shell()}
 function refreshInspector(){const i=document.querySelector('#inspector');if(i){i.innerHTML=inspectorHTML();i.querySelectorAll('[data-component]').forEach(b=>b.onclick=()=>selectComponent(b.dataset.component,true));i.querySelector('#componentSearch')?.addEventListener('input',e=>filterComponents(e.target.value))}updateHotspotActive()}
 function refreshLoading(){const stage=document.querySelector('#stage');const old=stage?.querySelector('.loading');if(old)old.remove();if(stage&&(state.loading||state.error))stage.insertAdjacentHTML('beforeend',loadingHTML());document.querySelector('#retry')?.addEventListener('click',()=>{state.error=null;state.loading=true;state.progress=0;state.modelIndex=0;refreshLoading();loadCurrentModel()})}
 
@@ -220,34 +246,145 @@ function initThree(){
  resizeObserver=new ResizeObserver(resize);resizeObserver.observe(host);resize();loadCurrentModel();loop();
 }
 function resize(){const h=document.querySelector('#threeHost');if(!h||!renderer)return;const w=Math.max(1,h.clientWidth),hh=Math.max(1,h.clientHeight);renderer.setSize(w,hh,false);labelRenderer.setSize(w,hh);camera.aspect=w/hh;camera.updateProjectionMatrix()}
-function clearModel(){highlighted.forEach(restoreHighlight);highlighted=[];hotspotObjects.forEach(o=>o.removeFromParent());hotspotObjects.clear();if(root){scene.remove(root);root.traverse(o=>{if(o.geometry)o.geometry.dispose?.();if(o.material){const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>m.dispose?.())}})}root=null;meshes=[];meshState.clear();}
+function clearModel(){
+ highlighted.forEach(restoreHighlight);highlighted=[];
+ hotspotObjects.forEach(o=>o.removeFromParent());hotspotObjects.clear();
+ associations.clear();meshToComponent.clear();explodeT=0;explodeGoal=0;
+ if(root){scene.remove(root);root.traverse(o=>{if(o.geometry)o.geometry.dispose?.();if(o.material){const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>m.dispose?.())}})}
+ root=null;meshes=[];meshState.clear();
+}
 function loadCurrentModel(){
  clearModel();state.loading=true;state.error=null;state.progress=0;refreshLoading();const p=product();const url=p.urls[state.modelIndex];
- loader.load(url,g=>{prepareModel(g.scene);state.loading=false;state.error=null;state.progress=100;refreshLoading();syncStatus();},ev=>{if(ev.total){state.progress=Math.min(99,ev.loaded/ev.total*100);refreshLoading()}},err=>{console.warn('Model load failed',url,err);if(state.modelIndex<p.urls.length-1){state.modelIndex++;state.progress=0;loadCurrentModel()}else{state.loading=false;state.error=`${err?.message||'Network or CORS error'} — ${url}`;refreshLoading();syncStatus()}})
+ loader.load(url,g=>{prepareModel(g.scene);state.loading=false;state.error=null;state.progress=100;refreshLoading();syncStatus();},
+ ev=>{if(ev.total){state.progress=Math.min(99,ev.loaded/ev.total*100);refreshLoading()}},
+ err=>{console.warn('Model load failed',url,err);if(state.modelIndex<p.urls.length-1){state.modelIndex++;state.progress=0;loadCurrentModel()}else{state.loading=false;state.error=`${err?.message||'Network or CORS error'} — ${url}`;refreshLoading();syncStatus()}})
 }
 function prepareModel(m){
  root=new THREE.Group();scene.add(root);root.add(m);m.updateMatrixWorld(true);
- let box=new THREE.Box3().setFromObject(m);let size=box.getSize(new THREE.Vector3());let center=box.getCenter(new THREE.Vector3());const max=Math.max(size.x,size.y,size.z)||1;const scale=2.65/max;m.scale.setScalar(scale);m.position.sub(center.multiplyScalar(scale));m.updateMatrixWorld(true);
+ let box=new THREE.Box3().setFromObject(m),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
+ const max=Math.max(size.x,size.y,size.z)||1,scale=2.65/max;m.scale.setScalar(scale);m.position.sub(center.multiplyScalar(scale));m.updateMatrixWorld(true);
  modelBox=new THREE.Box3().setFromObject(root);modelSize=modelBox.getSize(new THREE.Vector3());modelCenter=modelBox.getCenter(new THREE.Vector3());
- meshes=[];root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;meshes.push(o);meshState.set(o,{pos:o.position.clone()})}});
- createHotspots();frameModel();selectComponent(state.selectedId,false);syncStatus();
+ meshes=[];root.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;meshes.push(o);meshState.set(o,{base:o.position.clone(),exploded:o.position.clone()})}});
+ buildAssociations();computeExplodeTargets();createHotspots();frameModel();selectComponent(state.selectedId,false);syncStatus();
 }
-function hotspotBaseWorld(c){const n=c[2];return new THREE.Vector3(modelCenter.x+n[0]*modelSize.x,modelCenter.y+n[1]*modelSize.y,modelCenter.z+n[2]*modelSize.z)}
-function hotspotWorld(c){const obj=hotspotObjects.get(c[0]);if(obj){return obj.getWorldPosition(new THREE.Vector3())}return hotspotBaseWorld(c)}
-function createHotspots(){hotspotObjects.forEach(o=>o.removeFromParent());hotspotObjects.clear();product().components.forEach((c,i)=>{const el=document.createElement('button');el.className='hotspot';el.type='button';el.dataset.cid=c[0];el.innerHTML=`<span class="hotspot-dot"></span><span class="hotspot-label">${String(i+1).padStart(2,'0')} ${tx(c[1])}</span>`;el.addEventListener('click',e=>{e.stopPropagation();selectComponent(c[0],true)});const obj=new CSS2DObject(el);const world=hotspotBaseWorld(c);const hostMesh=nearestMeshes(world,1)[0];if(hostMesh){hostMesh.add(obj);obj.position.copy(hostMesh.worldToLocal(world.clone()))}else{scene.add(obj);obj.position.copy(world)}obj.visible=state.hotspots;hotspotObjects.set(c[0],obj)});updateHotspotActive()}
+function hotspotWorld(c){
+ const n=c[2];return new THREE.Vector3(modelCenter.x+n[0]*modelSize.x,modelCenter.y+n[1]*modelSize.y,modelCenter.z+n[2]*modelSize.z);
+}
+function objectLabel(m){
+ const names=[];let o=m,depth=0;
+ while(o&&depth<4){if(o.name)names.push(o.name);o=o.parent;depth++}
+ const mats=Array.isArray(m.material)?m.material:[m.material];mats.forEach(x=>{if(x?.name)names.push(x.name)});
+ return names.join(' ').toLowerCase().replace(/[_\-.]+/g,' ');
+}
+function semanticTokens(c){
+ const manual=MESH_HINTS[product().id]?.[c[0]]||[];
+ const words=[c[0],c[1].en,...manual].join(' ').toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!['the','and','system','area','assembly'].includes(x));
+ return [...new Set(words)];
+}
+function meshWorldCenter(m){
+ const b=new THREE.Box3().setFromObject(m);return b.isEmpty()?new THREE.Vector3():b.getCenter(new THREE.Vector3());
+}
+function buildAssociations(){
+ associations.clear();meshToComponent.clear();
+ if(!meshes.length)return;
+ const diag=Math.max(.001,modelSize.length());
+ const stats=meshes.map(m=>({m,label:objectLabel(m),center:meshWorldCenter(m)}));
+ product().components.forEach(c=>{
+   const anchor=hotspotWorld(c),tokens=semanticTokens(c);
+   const ranked=stats.map(s=>{
+     let semantic=0;tokens.forEach(tok=>{if(s.label.includes(tok))semantic+=tok.length>=6?3:2});
+     const spatial=Math.max(0,1-s.center.distanceTo(anchor)/diag);
+     return {...s,semantic,score:semantic*10+spatial};
+   }).sort((a,b)=>b.score-a.score);
+   const semanticHits=ranked.filter(x=>x.semantic>0).slice(0,Math.min(4,Math.max(1,Math.ceil(meshes.length/14))));
+   const chosen=semanticHits.length?semanticHits:ranked.slice(0,Math.min(2,meshes.length));
+   associations.set(c[0],chosen.map(x=>x.m));
+ });
+ meshes.forEach(m=>{
+   let best=null,bestScore=-Infinity;const label=objectLabel(m),mc=meshWorldCenter(m);
+   product().components.forEach(c=>{
+     const tokens=semanticTokens(c);let sem=0;tokens.forEach(tok=>{if(label.includes(tok))sem+=tok.length>=6?3:2});
+     const spatial=1-mc.distanceTo(hotspotWorld(c))/Math.max(.001,modelSize.length());
+     const score=sem*10+spatial;if(score>bestScore){bestScore=score;best=c[0]}
+   });
+   if(best)meshToComponent.set(m,best);
+ });
+}
+function associatedCenter(c){
+ const list=associations.get(c[0])||[];
+ if(!list.length)return hotspotWorld(c);
+ const b=new THREE.Box3();let any=false;
+ list.forEach(m=>{const mb=new THREE.Box3().setFromObject(m);if(!mb.isEmpty()){b.union(mb);any=true}});
+ return any?b.getCenter(new THREE.Vector3()):hotspotWorld(c);
+}
+function createHotspots(){
+ hotspotObjects.forEach(o=>o.removeFromParent());hotspotObjects.clear();
+ product().components.forEach((c,i)=>{
+   const el=document.createElement('button');el.className='hotspot';el.type='button';el.dataset.cid=c[0];
+   el.innerHTML=`<span class="hotspot-dot"></span><span class="hotspot-label">${String(i+1).padStart(2,'0')} ${tx(c[1])}</span>`;
+   el.addEventListener('click',e=>{e.stopPropagation();selectComponent(c[0],true)});
+   const obj=new CSS2DObject(el);obj.position.copy(associatedCenter(c));obj.visible=state.hotspots;scene.add(obj);hotspotObjects.set(c[0],obj);
+ });updateHotspotActive();
+}
+function updateHotspotPositions(){if(!root)return;root.updateMatrixWorld(true);product().components.forEach(c=>hotspotObjects.get(c[0])?.position.copy(associatedCenter(c)))}
 function updateHotspotActive(){hotspotObjects.forEach((o,id)=>{o.visible=state.hotspots;o.element.classList.toggle('active',id===state.selectedId)})}
-function frameModel(){if(!modelSize)return;controls.target.copy(modelCenter);const radius=modelSize.length()*.62;const dir=new THREE.Vector3(1.1,.62,1.55).normalize();camera.position.copy(modelCenter).add(dir.multiplyScalar(Math.max(3.1,radius*2.15)));camera.near=.01;camera.far=100;camera.updateProjectionMatrix();controls.update()}
-function nearestMeshes(point,count=2){return meshes.map(m=>{const b=new THREE.Box3().setFromObject(m);const c=b.getCenter(new THREE.Vector3());return {m,d:c.distanceTo(point)}}).sort((a,b)=>a.d-b.d).slice(0,Math.min(count,meshes.length)).map(x=>x.m)}
-function selectComponent(id,focus=true){const c=comp(id);if(!c||!modelSize)return;state.selectedId=id;refreshInspector();highlighted.forEach(restoreHighlight);highlighted=[];const p=hotspotWorld(c);nearestMeshes(p,Math.min(2,Math.max(1,Math.round(meshes.length/10)))).forEach(highlightMesh);if(focus)focusOn(p);if(innerWidth<=860){state.mobilePanel='info';document.querySelector('#inspector')?.classList.add('open')}}
+function frameModel(){
+ if(!modelSize)return;focusAnim=null;controls.target.copy(modelCenter);const radius=modelSize.length()*.62,dir=new THREE.Vector3(1.1,.62,1.55).normalize();
+ camera.position.copy(modelCenter).add(dir.multiplyScalar(Math.max(3.1,radius*2.15)));camera.near=.01;camera.far=100;camera.updateProjectionMatrix();controls.update();
+}
+function selectComponent(id,focus=true){
+ const c=comp(id);if(!c||!modelSize)return;state.selectedId=id;refreshInspector();
+ highlighted.forEach(restoreHighlight);highlighted=[];
+ const list=associations.get(id)||[];list.forEach(highlightMesh);
+ const p=associatedCenter(c);if(focus)focusOn(p);
+ if(innerWidth<=860){state.mobilePanel='info';document.querySelector('#inspector')?.classList.add('open')}
+}
 function highlightMesh(m){if(!m.material)return;const orig=m.material;m.userData.__origMaterial=orig;const arr=(Array.isArray(orig)?orig:[orig]).map(mat=>{const x=mat.clone();if('emissive' in x){x.emissive=new THREE.Color(0xff5a1f);x.emissiveIntensity=.42}if('roughness' in x)x.roughness=Math.min(1,(x.roughness??.5)+.08);return x});m.material=Array.isArray(orig)?arr:arr[0];highlighted.push(m)}
 function restoreHighlight(m){if(m.userData.__origMaterial){const current=Array.isArray(m.material)?m.material:[m.material];current.forEach(x=>x!==m.userData.__origMaterial&&x.dispose?.());m.material=m.userData.__origMaterial;delete m.userData.__origMaterial}}
 function focusOn(target){const currentTarget=controls.target.clone(),currentPos=camera.position.clone();const offset=currentPos.clone().sub(currentTarget);const desiredDist=Math.max(1.9,Math.min(3.2,offset.length()*.62));const desiredPos=target.clone().add(offset.normalize().multiplyScalar(desiredDist));if(reduceMotion){controls.target.copy(target);camera.position.copy(desiredPos);return}focusAnim={start:performance.now(),duration:650,fromT:currentTarget,toT:target.clone(),fromP:currentPos,toP:desiredPos}}
-function onModelClick(e){if(!root||state.loading)return;const r=renderer.domElement.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(meshes,true)[0];if(!hit)return;let best=null,bd=Infinity;product().components.forEach(c=>{const d=hit.point.distanceTo(hotspotWorld(c));if(d<bd){bd=d;best=c}});if(best)selectComponent(best[0],true)}
+function onModelClick(e){
+ if(!root||state.loading)return;const r=renderer.domElement.getBoundingClientRect();
+ pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);
+ const hit=raycaster.intersectObjects(meshes,true)[0];if(!hit)return;
+ const direct=meshToComponent.get(hit.object);if(direct){selectComponent(direct,true);return}
+ let best=null,bd=Infinity;product().components.forEach(c=>{const d=hit.point.distanceTo(associatedCenter(c));if(d<bd){bd=d;best=c}});
+ if(best)selectComponent(best[0],true);
+}
 function action(a){if(a==='reset')frameModel();if(a==='auto'){state.auto=!state.auto;controls.autoRotate=state.auto;syncToolButtons()}if(a==='hotspots'){state.hotspots=!state.hotspots;updateHotspotActive();syncToolButtons()}if(a==='explode')toggleExplode()}
 function syncToolButtons(){document.querySelectorAll('[data-action="auto"]').forEach(b=>b.classList.toggle('on',state.auto));document.querySelectorAll('[data-action="hotspots"]').forEach(b=>b.classList.toggle('on',state.hotspots))}
-function toggleExplode(){if(!root||!meshes.length)return;state.exploded=!state.exploded;const strength=Math.max(.28,modelSize.length()*.16);const items=[];meshes.forEach(m=>{const base=meshState.get(m)?.pos;if(!base)return;let target=base.clone();if(state.exploded){const wb=new THREE.Box3().setFromObject(m),wc=wb.getCenter(new THREE.Vector3());let worldDir=wc.clone().sub(modelCenter);if(worldDir.lengthSq()<.0001)worldDir=new THREE.Vector3((Math.random()-.5),(.15+Math.random()*.3),(Math.random()-.5));worldDir.normalize().multiplyScalar(strength);const p0=m.parent.worldToLocal(wc.clone());const p1=m.parent.worldToLocal(wc.clone().add(worldDir));target.add(p1.sub(p0))}items.push({m,from:m.position.clone(),to:target})});explodeAnim={start:performance.now(),duration:reduceMotion?1:720,items};document.querySelectorAll('[data-action="explode"]').forEach(b=>{b.textContent=state.exploded?t('assemble'):t('explode');b.classList.toggle('on',state.exploded)});selectComponent(state.selectedId,false)}
+function deterministicDirection(m){
+ let h=2166136261;const s=objectLabel(m)||String(meshes.indexOf(m));for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}
+ const a=((h>>>0)%6283)/1000,b=(((h>>>8)%1600)/1000)-.8;return new THREE.Vector3(Math.cos(a),b*.55,Math.sin(a)).normalize();
+}
+function computeExplodeTargets(){
+ if(!modelSize)return;const strength=Math.max(.34,modelSize.length()*.20);
+ meshes.forEach(m=>{
+   const st=meshState.get(m);if(!st)return;
+   const wc=meshWorldCenter(m);let worldDir=wc.clone().sub(modelCenter);
+   if(worldDir.lengthSq()<.015)worldDir=deterministicDirection(m);else worldDir.normalize();
+   const direct=meshToComponent.get(m),c=direct?comp(direct):null;
+   if(c){const ca=hotspotWorld(c).clone().sub(modelCenter);if(ca.lengthSq()>.01)worldDir.lerp(ca.normalize(),.42).normalize()}
+   worldDir.multiplyScalar(strength*(.72+((meshes.indexOf(m)%5)*.08)));
+   const p0=m.parent.worldToLocal(wc.clone()),p1=m.parent.worldToLocal(wc.clone().add(worldDir));
+   st.exploded=st.base.clone().add(p1.sub(p0));
+ });
+}
+function toggleExplode(){
+ if(!root||!meshes.length)return;state.exploded=!state.exploded;explodeGoal=state.exploded?1:0;
+ document.querySelectorAll('[data-action="explode"]').forEach(b=>{b.textContent=state.exploded?t('assemble'):t('explode');b.classList.toggle('on',state.exploded)});
+}
 function syncStatus(){const s=document.querySelector('#modelStats');if(s)s.innerHTML=`<b>${String(meshes.length).padStart(2,'0')}</b> ${t('mesh')}<br><b>${String(product().components.length).padStart(2,'0')}</b> ${t('part')}`;}
-function loop(now=performance.now()){raf=requestAnimationFrame(loop);if(!renderer)return;if(focusAnim){const u=Math.min(1,(now-focusAnim.start)/focusAnim.duration),e=1-Math.pow(1-u,3);controls.target.lerpVectors(focusAnim.fromT,focusAnim.toT,e);camera.position.lerpVectors(focusAnim.fromP,focusAnim.toP,e);if(u>=1)focusAnim=null}if(explodeAnim){const u=Math.min(1,(now-explodeAnim.start)/explodeAnim.duration),e=.5-Math.cos(Math.PI*u)/2;explodeAnim.items.forEach(x=>x.m.position.lerpVectors(x.from,x.to,e));if(u>=1)explodeAnim=null}controls.autoRotate=state.auto;controls.update();renderer.render(scene,camera);labelRenderer.render(scene,camera)}
+function loop(now=performance.now()){
+ raf=requestAnimationFrame(loop);if(!renderer)return;
+ const dt=Math.min(.05,Math.max(.001,(now-lastFrame)/1000));lastFrame=now;
+ if(focusAnim){const u=Math.min(1,(now-focusAnim.start)/focusAnim.duration),e=1-Math.pow(1-u,3);controls.target.lerpVectors(focusAnim.fromT,focusAnim.toT,e);camera.position.lerpVectors(focusAnim.fromP,focusAnim.toP,e);if(u>=1)focusAnim=null}
+ const speed=reduceMotion?1:Math.min(1,dt*7.5);explodeT=THREE.MathUtils.lerp(explodeT,explodeGoal,speed);
+ if(Math.abs(explodeT-explodeGoal)<.001)explodeT=explodeGoal;
+ const ee=explodeT<.5?4*explodeT*explodeT*explodeT:1-Math.pow(-2*explodeT+2,3)/2;
+ meshes.forEach(m=>{const st=meshState.get(m);if(st)m.position.lerpVectors(st.base,st.exploded,ee)});
+ updateHotspotPositions();
+ controls.autoRotate=state.auto;controls.update();renderer.render(scene,camera);labelRenderer.render(scene,camera);
+}
 function destroyThree(){if(raf)cancelAnimationFrame(raf);resizeObserver?.disconnect();clearModel();controls?.dispose();renderer?.dispose();renderer?.domElement?.remove();labelRenderer?.domElement?.remove();renderer=labelRenderer=scene=camera=controls=null;hotspotObjects.clear()}
 
 shell();
