@@ -38,6 +38,51 @@ html[dir="rtl"] body{font-family:Tahoma,Arial,sans-serif}html[dir="rtl"] .produc
 @media(max-width:860px){.header{grid-template-columns:1fr auto}.header-marquee{display:none}.workspace{grid-template-columns:1fr}.product-rail,.inspector{position:absolute;z-index:30;top:72px;bottom:0;width:min(320px,88vw);transition:transform .24s}.product-rail{left:0;transform:translateX(-102%)}.inspector{right:0;transform:translateX(102%)}.product-rail.open,.inspector.open{transform:translateX(0)}.mobile-products,.mobile-info{display:block}.stage-title{max-width:75%}.stage-title h2{font-size:25px}.stage-bottom{align-items:flex-start;flex-direction:column}.status-chip{align-self:flex-end}.tool{padding:8px 9px}.app{grid-template-rows:64px minmax(0,1fr)}.product-rail,.inspector{top:64px}.header{padding:0 10px}.brand p{display:none}}
 @media(max-width:520px){.brand h1{font-size:13px}.brand-code{width:34px;height:34px}.stage-title h2{font-size:21px}.stage-title p{display:none}.stage-top{top:12px;left:12px;right:12px}.stage-bottom{left:10px;right:10px;bottom:10px}.toolbox{gap:5px}.tool{font-size:9px;padding:8px}.status-chip{font-size:9px}.big-no{font-size:30px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Industrial polygon control system */
+:where(.tool,.product-card,.component-btn,.header-btn,.lang button,.retry,.hotspot){
+  --cut:10px;
+  border-radius:0 !important;
+  clip-path:polygon(
+    var(--cut) 0,
+    calc(100% - var(--cut)) 0,
+    100% var(--cut),
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    var(--cut) 100%,
+    0 calc(100% - var(--cut)),
+    0 var(--cut)
+  );
+}
+.header-btn{--cut:8px}
+.lang button{--cut:6px}
+.product-card{--cut:14px}
+.component-btn{--cut:10px}
+.tool{--cut:9px}
+.retry{--cut:10px}
+.hotspot{--cut:7px}
+:where(.tool,.product-card,.component-btn,.header-btn,.retry){
+  position:relative;
+}
+.product-card.active,.component-btn.active,.tool.primary,.tool.on{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);
+}
+.product-card::after,.component-btn::after,.tool::after{
+  content:"";
+  position:absolute;
+  width:11px;height:1px;
+  right:5px;bottom:5px;
+  background:currentColor;
+  opacity:.42;
+  transform:rotate(-45deg);
+  pointer-events:none;
+}
+html[dir="rtl"] .product-card::after,
+html[dir="rtl"] .component-btn::after,
+html[dir="rtl"] .tool::after{
+  right:auto;left:5px;transform:rotate(45deg);
+}
+
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
 </head>
@@ -46,6 +91,7 @@ html[dir="rtl"] body{font-family:Tahoma,Arial,sans-serif}html[dir="rtl"] .produc
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -109,10 +155,10 @@ const PRODUCTS=[
     ]
   },
   {
-    id:'engine', code:'ENG-05', type:B('Mechanical','مکانیک'), name:B('Automotive Engine','موتور خودرو'),
-    subtitle:B('Mechanical power-unit component study','مطالعه قطعات واحد تولید توان مکانیکی'),
-    urls:['https://raw.githubusercontent.com/aframevr/aframe/master/examples/showcase/anime-UI/models/engine.glb'],
-    credit:'Engine GLB from A-Frame project examples.',
+    id:'engine', code:'ENG-05', type:B('Mechanical','مکانیک'), name:B('V8 Automotive Engine','موتور V8 خودرو'),
+    subtitle:B('Realistic multi-part V8 power-unit study','مطالعه واقع‌گرایانه واحد توان V8 چندقطعه‌ای'),
+    urls:['https://raw.githubusercontent.com/johnnyhuy/vibes/main/experiments/v8-cutaway/public/models/v8-engine.glb'],
+    credit:'“Animated Engine V8” by meeww — CC BY 4.0. Source: Sketchfab, vendored via johnnyhuy/vibes / Objaverse.',
     components:[
       ['top',B('Upper Cover','کاور بالایی'),[0,.42,.00],B('Upper engine cover and service-access zone.','کاور بالایی موتور و ناحیه دسترسی سرویس.'),['Upper assembly','Service access','Protective cover']],
       ['intake',B('Intake Side','سمت ورودی هوا'),[-.43,.06,.05],B('Air-entry side feeding the combustion system.','سمت ورودی هوا به سامانه احتراق.'),['Air path','Intake region','Flow control']],
@@ -188,6 +234,9 @@ let meshes=[], meshState=new Map(), hotspotObjects=new Map(), highlighted=[], as
 let explodeT=0, explodeGoal=0, lastFrame=performance.now();
 let explodeAnim=null;
 const loader=new GLTFLoader();
+const dracoLoader=new DRACOLoader();
+dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/libs/draco/');
+loader.setDRACOLoader(dracoLoader);
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const product=()=>PRODUCTS.find(p=>p.id===state.productId)||PRODUCTS[0];
 const tx=o=>o?.[state.lang]??o?.en??''; const t=k=>UI[state.lang][k]||k;
