@@ -326,6 +326,7 @@ function initEmbeddedModel(host){
  const p=product();
  state.loading=true;state.error=null;state.progress=65;refreshLoading();
  document.querySelectorAll('[data-action="explode"],[data-action="auto"],[data-action="hotspots"]').forEach(b=>b.style.display='none');
+ document.querySelector('#stage .embed-note')?.remove();
  const note=document.createElement('div');note.className='embed-note';note.textContent=state.lang==='fa'?'مدل آماده سه‌بعدی · نمایشگر رسمی Sketchfab':'READY-MADE 3D MODEL · OFFICIAL SKETCHFAB VIEWER';document.querySelector('#stage')?.appendChild(note);
  const frame=document.createElement('iframe');
  frame.className='sketchfab-frame';frame.title=tx(p.name);frame.src=p.embed;
