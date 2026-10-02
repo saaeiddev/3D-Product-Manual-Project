@@ -25,7 +25,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .product-rail{min-height:0;border-right:1px solid var(--ink);display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--paper)}
 .rail-head{padding:18px;border-bottom:1px solid var(--line)}.kicker{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.18em;font-weight:800}.rail-head h2{font-size:26px;line-height:.94;margin:7px 0 0;letter-spacing:-.06em}.product-list{overflow:auto;padding:9px}.product-card{width:100%;display:grid;grid-template-columns:46px minmax(0,1fr) auto;align-items:center;gap:10px;text-align:left;border:1px solid transparent;background:transparent;padding:9px;cursor:pointer;min-height:62px}.product-card:hover{border-color:var(--line);background:#fff8}.product-card.active{border-color:var(--ink);background:var(--ink);color:var(--white)}.product-index{width:38px;height:38px;border:1px solid currentColor;display:grid;place-items:center;font-size:10px;font-weight:900}.product-card .name{font-size:12px;font-weight:800;line-height:1.15}.product-card .type{font-size:9px;opacity:.58;text-transform:uppercase;letter-spacing:.08em;margin-top:4px}.product-card .arrow{font-size:16px}.rail-foot{padding:12px 18px;border-top:1px solid var(--line);font-size:10px;color:var(--muted);line-height:1.45}.rail-foot b{color:var(--ink)}
 .stage-wrap{position:relative;min-width:0;min-height:0;background:var(--stage);overflow:hidden}.stage-wrap:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 75%);pointer-events:none}.stage-wrap:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 48%,transparent 0 28%,rgba(0,0,0,.15) 65%,rgba(0,0,0,.45) 100%)}
-#threeHost{position:absolute;inset:0;z-index:1}.webgl{width:100%;height:100%;display:block}.labels-layer{position:absolute;inset:0;pointer-events:none;z-index:4}
+#threeHost{position:absolute;inset:0;z-index:1}.webgl{width:100%;height:100%;display:block}.labels-layer{position:absolute;inset:0;pointer-events:none;z-index:4}.sketchfab-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#161713}.embed-note{position:absolute;z-index:7;left:18px;bottom:66px;background:rgba(18,19,15,.86);border:1px solid #5f6058;color:#cfcec5;padding:7px 9px;font:9px/1.35 monospace;pointer-events:none;backdrop-filter:blur(6px)}
 .stage-top{position:absolute;z-index:5;left:18px;right:18px;top:16px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}.stage-title{color:var(--white);max-width:66%}.stage-title .eyebrow{display:inline-block;background:var(--accent);color:white;padding:5px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.16em;font-weight:900}.stage-title h2{font-size:34px;line-height:.93;letter-spacing:-.065em;margin:9px 0 6px}.stage-title p{font-size:11px;color:#aaa99f;margin:0;max-width:520px}.model-stats{color:#cfcec5;text-align:right;font:10px/1.5 monospace}.model-stats b{color:var(--accent-2)}
 .stage-bottom{position:absolute;z-index:6;left:18px;right:18px;bottom:17px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.toolbox{display:flex;flex-wrap:wrap;gap:7px}.tool{border:1px solid #77766e;background:rgba(22,23,19,.82);color:#f3f0e9;padding:9px 11px;cursor:pointer;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;backdrop-filter:blur(6px)}.tool:hover,.tool.on{border-color:var(--accent);background:var(--accent);color:white}.tool.primary{background:var(--accent-2);color:var(--ink);border-color:var(--accent-2)}.status-chip{font:10px monospace;color:#cac9bf;background:#12130f;border:1px solid #5f6058;padding:9px 10px;white-space:nowrap}.status-chip span{display:inline-block;width:7px;height:7px;background:var(--accent-2);margin-right:7px}
 .hotspot{display:flex;align-items:center;gap:7px;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;transition:.18s}.hotspot-dot{width:13px;height:13px;border:2px solid var(--white);background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.16)}.hotspot-label{background:var(--white);color:var(--ink);border:1px solid var(--ink);padding:5px 7px;font:700 9px Arial;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}.hotspot:hover .hotspot-dot,.hotspot.active .hotspot-dot{background:var(--accent-2);transform:scale(1.15)}.hotspot.active .hotspot-label{background:var(--accent-2)}
@@ -195,12 +195,39 @@ const PRODUCTS=[
       ['foot',B('Footrest','زیرپایی'),[0,-.30,.34],B('Lower support platform for feet and leg positioning.','صفحه پشتیبان پایین برای قرارگیری پاها.'),['Foot plate','Support bar','Positioning area']],
       ['battery',B('Battery Zone','ناحیه باتری'),[0,-.28,-.22],B('Low-mounted energy storage powering the drive system.','ذخیره انرژی در بخش پایین برای تغذیه سیستم حرکت.'),['Battery pack','Low center of gravity','Power system']]
     ]
+  },
+  {
+    id:'phoneBattery', code:'PWR-08', type:B('Mobile Power','توان موبایل'), name:B('Smartphone Li-ion Battery','باتری لیتیوم‌یون موبایل'),
+    subtitle:B('Ready-made realistic mobile battery product model','مدل آماده و واقع‌گرایانه باتری موبایل'),
+    embed:'https://sketchfab.com/models/a7828de781aa4bf89b74d72ede7aa95e/embed?autostart=1&ui_infos=0&ui_watermark=1&ui_controls=1',
+    urls:['https://sketchfab.com/models/a7828de781aa4bf89b74d72ede7aa95e/embed'],
+    credit:'Q Mobile Battery Product Animation by MuhammadShifaullah — official Sketchfab viewer; model remains hosted by its creator.',
+    components:[
+      ['cell',B('Li-ion Cell Body','بدنه سلول لیتیوم‌یون'),[0,0,0],B('Flat rechargeable energy-storage body used in mobile electronics.','بدنه تخت ذخیره انرژی قابل شارژ برای تجهیزات موبایل.'),['Rechargeable cell','Flat-pack construction','Mobile power source']],
+      ['terminals',B('Battery Terminals','ترمینال‌های باتری'),[0,0,0],B('Electrical contacts connecting the battery to device power circuitry.','کنتاکت‌های الکتریکی برای اتصال باتری به مدار تغذیه دستگاه.'),['Positive / negative contacts','Low-resistance interface','Device connection']],
+      ['wrapper',B('Protective Wrapper','روکش محافظ'),[0,0,0],B('Outer protective layer isolating the cell and carrying identification markings.','لایه محافظ بیرونی برای عایق‌کاری سلول و درج مشخصات.'),['Electrical insulation','Printed identification','Surface protection']],
+      ['protection',B('Protection Circuit Zone','ناحیه مدار حفاظت'),[0,0,0],B('Battery protection area for safe charge and discharge control.','ناحیه حفاظت باتری برای کنترل ایمن شارژ و دشارژ.'),['Over-current protection','Charge safety','Thermal monitoring zone']]
+    ]
+  },
+  {
+    id:'laptopBattery', code:'PWR-09', type:B('Computer Power','توان رایانه'), name:B('Laptop Battery Pack','پک باتری لپ‌تاپ'),
+    subtitle:B('Ready-made realistic removable laptop battery model','مدل آماده و واقع‌گرایانه باتری لپ‌تاپ'),
+    embed:'https://sketchfab.com/models/e18eaa6fcb5e4883bb0abf3252176f5c/embed?autostart=1&ui_infos=0&ui_watermark=1&ui_controls=1',
+    urls:['https://sketchfab.com/models/e18eaa6fcb5e4883bb0abf3252176f5c/embed'],
+    credit:'LAPTOP BATTERY by Graphitage — CC Attribution, displayed through the official Sketchfab viewer.',
+    components:[
+      ['housing',B('Battery Housing','بدنه باتری'),[0,0,0],B('Rigid enclosure protecting the internal rechargeable cell pack.','محفظه سخت برای محافظت از مجموعه سلول‌های قابل شارژ داخلی.'),['Impact-resistant shell','Pack structure','Electrical isolation']],
+      ['connector',B('Laptop Connector','کانکتور لپ‌تاپ'),[0,0,0],B('Multi-contact interface linking the pack to laptop power and data lines.','رابط چندکنتاکتی برای اتصال باتری به خطوط توان و داده لپ‌تاپ.'),['Power contacts','Communication pins','Docking interface']],
+      ['latch',B('Locking / Latch Area','ناحیه قفل و چفت'),[0,0,0],B('Mechanical retention area securing a removable pack inside the chassis.','ناحیه نگه‌دارنده مکانیکی برای ثابت‌کردن پک قابل‌تعویض در شاسی.'),['Retention feature','Service removal','Chassis engagement']],
+      ['cells',B('Internal Cell Pack','مجموعه سلول‌های داخلی'),[0,0,0],B('Grouped rechargeable cells providing pack voltage and capacity.','سلول‌های قابل شارژ گروه‌بندی‌شده برای تأمین ولتاژ و ظرفیت پک.'),['Series / parallel cell group','Energy storage','Pack capacity']],
+      ['bms',B('Battery Management Zone','ناحیه مدیریت باتری'),[0,0,0],B('Electronics supervising voltage, current, temperature and pack protection.','مدارهای نظارت بر ولتاژ، جریان، دما و حفاظت پک.'),['BMS electronics','Temperature monitoring','Charge / discharge protection']]
+    ]
   }
 ];
 
 const UI={
- en:{catalog:'Product Catalog',catalogSub:'SELECT A SYSTEM TO INSPECT',library:'07 verified interactive studies',components:'Components',function:'What it does',details:'Technical notes',source:'Asset source',search:'Search components…',explode:'Explode',assemble:'Assemble',reset:'Reset',auto:'Auto rotate',hotspots:'Hotspots',focus:'Focus',loading:'Loading 3D asset',clickHint:'Click the model or a hotspot to inspect a part',ready:'MODEL READY',failed:'Model source could not be loaded.',retry:'Retry',mesh:'meshes',part:'parts'},
- fa:{catalog:'کاتالوگ محصولات',catalogSub:'یک سیستم را برای بررسی انتخاب کنید',library:'۷ مطالعه سه‌بعدی تعاملی',components:'اجزا',function:'عملکرد',details:'نکات فنی',source:'منبع مدل',search:'جست‌وجوی اجزا…',explode:'بازکردن اجزا',assemble:'مونتاژ',reset:'بازنشانی',auto:'چرخش خودکار',hotspots:'نقاط تعاملی',focus:'تمرکز',loading:'در حال بارگذاری مدل سه‌بعدی',clickHint:'روی مدل یا نقاط تعاملی کلیک کنید',ready:'مدل آماده است',failed:'منبع مدل سه‌بعدی بارگذاری نشد.',retry:'تلاش مجدد',mesh:'مش',part:'قطعه'}
+ en:{catalog:'Product Catalog',catalogSub:'SELECT A SYSTEM TO INSPECT',library:'09 verified interactive studies',components:'Components',function:'What it does',details:'Technical notes',source:'Asset source',search:'Search components…',explode:'Explode',assemble:'Assemble',reset:'Reset',auto:'Auto rotate',hotspots:'Hotspots',focus:'Focus',loading:'Loading 3D asset',clickHint:'Click the model or a hotspot to inspect a part',ready:'MODEL READY',failed:'Model source could not be loaded.',retry:'Retry',mesh:'meshes',part:'parts'},
+ fa:{catalog:'کاتالوگ محصولات',catalogSub:'یک سیستم را برای بررسی انتخاب کنید',library:'۹ مطالعه سه‌بعدی تعاملی',components:'اجزا',function:'عملکرد',details:'نکات فنی',source:'منبع مدل',search:'جست‌وجوی اجزا…',explode:'بازکردن اجزا',assemble:'مونتاژ',reset:'بازنشانی',auto:'چرخش خودکار',hotspots:'نقاط تعاملی',focus:'تمرکز',loading:'در حال بارگذاری مدل سه‌بعدی',clickHint:'روی مدل یا نقاط تعاملی کلیک کنید',ready:'مدل آماده است',failed:'منبع مدل سه‌بعدی بارگذاری نشد.',retry:'تلاش مجدد',mesh:'مش',part:'قطعه'}
 };
 
 
@@ -253,7 +280,7 @@ function shell(){
   </header>
   <main class="workspace">
    <aside class="product-rail ${state.mobilePanel==='products'?'open':''}" id="productRail"><div class="rail-head"><div class="kicker">${t('catalogSub')}</div><h2>${t('catalog')}</h2></div><div class="product-list">${PRODUCTS.map((x,i)=>productCard(x,i)).join('')}</div><div class="rail-foot"><b>${t('library')}</b><br>${state.lang==='fa'?'مدل‌های آماده با منبع و مجوز قابل ردیابی':'Ready-made models with traceable sources and licensing.'}</div></aside>
-   <section class="stage-wrap" id="stage"><div id="threeHost"></div><div class="stage-top"><div class="stage-title"><span class="eyebrow">${p.code} · ${tx(p.type)}</span><h2>${tx(p.name)}</h2><p>${tx(p.subtitle)} — ${t('clickHint')}</p></div><div class="model-stats" id="modelStats">—</div></div><div class="stage-bottom"><div class="toolbox"><button class="tool primary" data-action="explode">${state.exploded?t('assemble'):t('explode')}</button><button class="tool" data-action="reset">↺ ${t('reset')}</button><button class="tool ${state.auto?'on':''}" data-action="auto">◉ ${t('auto')}</button><button class="tool ${state.hotspots?'on':''}" data-action="hotspots">＋ ${t('hotspots')}</button></div><div class="status-chip"><span></span>${state.loading?t('loading'):state.error?t('failed'):t('ready')}</div></div>${loadingHTML()}</section>
+   <section class="stage-wrap" id="stage"><div id="threeHost"></div><div class="stage-top"><div class="stage-title"><span class="eyebrow">${p.code} · ${tx(p.type)}</span><h2>${tx(p.name)}</h2><p>${tx(p.subtitle)} — ${p.embed?(state.lang==='fa'?'مدل را بچرخانید و زوم کنید':'Rotate and zoom the model'):t('clickHint')}</p></div><div class="model-stats" id="modelStats">—</div></div><div class="stage-bottom"><div class="toolbox"><button class="tool primary" data-action="explode">${state.exploded?t('assemble'):t('explode')}</button><button class="tool" data-action="reset">↺ ${t('reset')}</button><button class="tool ${state.auto?'on':''}" data-action="auto">◉ ${t('auto')}</button><button class="tool ${state.hotspots?'on':''}" data-action="hotspots">＋ ${t('hotspots')}</button></div><div class="status-chip"><span></span>${state.loading?t('loading'):state.error?t('failed'):t('ready')}</div></div>${loadingHTML()}</section>
    <aside class="inspector ${state.mobilePanel==='info'?'open':''}" id="inspector">${inspectorHTML()}</aside>
   </main>
  </div>`;
@@ -283,6 +310,7 @@ function refreshLoading(){const stage=document.querySelector('#stage');const old
 
 function initThree(){
  const host=document.querySelector('#threeHost'); if(!host)return;
+ if(product().embed){initEmbeddedModel(host);return}
  scene=new THREE.Scene(); scene.background=new THREE.Color(0x161713);
  camera=new THREE.PerspectiveCamera(38,1,.01,100);camera.position.set(3.6,2.4,5.2);
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.domElement.className='webgl';host.appendChild(renderer.domElement);
@@ -293,6 +321,18 @@ function initThree(){
  controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.065;controls.minDistance=2.15;controls.maxDistance=9;controls.target.set(0,0,0);controls.autoRotateSpeed=.8;
  raycaster=new THREE.Raycaster();pointer=new THREE.Vector2();renderer.domElement.addEventListener('pointerup',onModelClick);
  resizeObserver=new ResizeObserver(resize);resizeObserver.observe(host);resize();loadCurrentModel();loop();
+}
+function initEmbeddedModel(host){
+ const p=product();
+ state.loading=true;state.error=null;state.progress=65;refreshLoading();
+ document.querySelectorAll('[data-action="explode"],[data-action="auto"],[data-action="hotspots"]').forEach(b=>b.style.display='none');
+ const note=document.createElement('div');note.className='embed-note';note.textContent=state.lang==='fa'?'مدل آماده سه‌بعدی · نمایشگر رسمی Sketchfab':'READY-MADE 3D MODEL · OFFICIAL SKETCHFAB VIEWER';document.querySelector('#stage')?.appendChild(note);
+ const frame=document.createElement('iframe');
+ frame.className='sketchfab-frame';frame.title=tx(p.name);frame.src=p.embed;
+ frame.allow='autoplay; fullscreen; xr-spatial-tracking';frame.setAttribute('allowfullscreen','');
+ frame.onload=()=>{state.loading=false;state.progress=100;refreshLoading();syncStatus()};
+ host.replaceChildren(frame);
+ setTimeout(()=>{if(state.loading){state.loading=false;state.progress=100;refreshLoading();syncStatus()}},4500);
 }
 function resize(){const h=document.querySelector('#threeHost');if(!h||!renderer)return;const w=Math.max(1,h.clientWidth),hh=Math.max(1,h.clientHeight);renderer.setSize(w,hh,false);labelRenderer.setSize(w,hh);camera.aspect=w/hh;camera.updateProjectionMatrix()}
 function clearModel(){
@@ -382,7 +422,9 @@ function frameModel(){
  camera.position.copy(modelCenter).add(dir.multiplyScalar(Math.max(3.1,radius*2.15)));camera.near=.01;camera.far=100;camera.updateProjectionMatrix();controls.update();
 }
 function selectComponent(id,focus=true){
- const c=comp(id);if(!c||!modelSize)return;state.selectedId=id;refreshInspector();
+ const c=comp(id);if(!c)return;
+ if(product().embed){state.selectedId=id;refreshInspector();if(innerWidth<=860){state.mobilePanel='info';document.querySelector('#inspector')?.classList.add('open')}return}
+ if(!modelSize)return;state.selectedId=id;refreshInspector();
  highlighted.forEach(restoreHighlight);highlighted=[];
  const list=associations.get(id)||[];list.forEach(highlightMesh);
  const p=associatedCenter(c);if(focus)focusOn(p);
@@ -399,7 +441,13 @@ function onModelClick(e){
  let best=null,bd=Infinity;product().components.forEach(c=>{const d=hit.point.distanceTo(associatedCenter(c));if(d<bd){bd=d;best=c}});
  if(best)selectComponent(best[0],true);
 }
-function action(a){if(a==='reset')frameModel();if(a==='auto'){state.auto=!state.auto;controls.autoRotate=state.auto;syncToolButtons()}if(a==='hotspots'){state.hotspots=!state.hotspots;updateHotspotActive();syncToolButtons()}if(a==='explode')toggleExplode()}
+function action(a){
+ if(product().embed){if(a==='reset'){const host=document.querySelector('#threeHost');if(host)initEmbeddedModel(host)}return}
+ if(a==='reset')frameModel();
+ if(a==='auto'){state.auto=!state.auto;if(controls)controls.autoRotate=state.auto;syncToolButtons()}
+ if(a==='hotspots'){state.hotspots=!state.hotspots;updateHotspotActive();syncToolButtons()}
+ if(a==='explode')toggleExplode()
+}
 function syncToolButtons(){document.querySelectorAll('[data-action="auto"]').forEach(b=>b.classList.toggle('on',state.auto));document.querySelectorAll('[data-action="hotspots"]').forEach(b=>b.classList.toggle('on',state.hotspots))}
 function deterministicDirection(m){
  let h=2166136261;const s=objectLabel(m)||String(meshes.indexOf(m));for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}
@@ -422,7 +470,7 @@ function toggleExplode(){
  if(!root||!meshes.length)return;state.exploded=!state.exploded;explodeGoal=state.exploded?1:0;
  document.querySelectorAll('[data-action="explode"]').forEach(b=>{b.textContent=state.exploded?t('assemble'):t('explode');b.classList.toggle('on',state.exploded)});
 }
-function syncStatus(){const s=document.querySelector('#modelStats');if(s)s.innerHTML=`<b>${String(meshes.length).padStart(2,'0')}</b> ${t('mesh')}<br><b>${String(product().components.length).padStart(2,'0')}</b> ${t('part')}`;}
+function syncStatus(){const s=document.querySelector('#modelStats');if(!s)return;if(product().embed){s.innerHTML=`<b>3D</b> SKETCHFAB<br><b>${String(product().components.length).padStart(2,'0')}</b> ${t('part')}`;return}s.innerHTML=`<b>${String(meshes.length).padStart(2,'0')}</b> ${t('mesh')}<br><b>${String(product().components.length).padStart(2,'0')}</b> ${t('part')}`;}
 function loop(now=performance.now()){
  raf=requestAnimationFrame(loop);if(!renderer)return;
  const dt=Math.min(.05,Math.max(.001,(now-lastFrame)/1000));lastFrame=now;
